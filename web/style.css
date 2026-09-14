@@ -3067,3 +3067,395 @@ body[data-operating-level="7"] {
   gap: 10px;
 }
 
+/* ============================================================================== */
+/* AI SHIELD & PROBE HEADER PILLS                                                 */
+/* ============================================================================== */
+.ai-shield-pill, .probe-header-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: var(--font-sans);
+  color: var(--text-main);
+}
+
+.ai-shield-pill:hover {
+  border-color: rgba(168, 85, 247, 0.4);
+  background: rgba(168, 85, 247, 0.12);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.2);
+}
+
+.probe-header-pill:hover {
+  border-color: rgba(0, 240, 255, 0.4);
+  background: rgba(0, 240, 255, 0.12);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.2);
+}
+
+.ai-pill-text, .probe-header-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ============================================================================== */
+/* DOCK FLOTANTE PERSISTENTE: MÚSICA & RADIO SOBERANA HI-FI                       */
+/* ============================================================================== */
+.audio-mini-player-dock {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(94%, 1100px);
+  height: 64px;
+  background: rgba(11, 17, 32, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 240, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.audio-dock-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 260px;
+}
+
+.audio-dock-avatar {
+  font-size: 1.6rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseGlow 3s infinite alternate;
+}
+
+.audio-dock-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.audio-dock-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.audio-dock-track {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.audio-dock-listeners {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.audio-dock-center {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.audio-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-audio-ctrl {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  transition: color 0.2s;
+}
+
+.btn-audio-ctrl:hover {
+  color: #fff;
+}
+
+.btn-audio-play {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00f0ff, #0284c7);
+  border: none;
+  color: #040813;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-audio-play:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.7);
+}
+
+.btn-audio-play.playing {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}
+
+.audio-spectrum-canvas {
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.audio-dock-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.audio-station-select {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.btn-audio-mic {
+  font-size: 0.72rem;
+  padding: 5px 12px;
+  background: rgba(168, 85, 247, 0.2);
+  border-color: rgba(168, 85, 247, 0.4);
+  color: #c084fc;
+}
+
+.btn-audio-mic.recording {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+  animation: pulseRecording 1.5s infinite;
+}
+
+@keyframes pulseRecording {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.audio-volume-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.audio-volume-slider {
+  width: 70px;
+  accent-color: #00f0ff;
+  cursor: pointer;
+}
+
+/* ============================================================================== */
+/* MODAL: STREAMING REAL EN VIVO                                                  */
+/* ============================================================================== */
+.stream-modal-card {
+  max-width: 1050px;
+  width: 95%;
+}
+
+.stream-modal-body {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 20px;
+  padding: 20px 24px;
+}
+
+.stream-panel-col {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.stream-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.stream-video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stream-video-elem {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.stream-video-overlay-timer {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ef4444;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.stream-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  gap: 12px;
+}
+
+.stream-source-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stream-select-dropdown {
+  background: rgba(11, 17, 32, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+}
+
+.stream-channels-scrollbox {
+  max-height: 160px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stream-channel-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.stream-chip-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ============================================================================== */
+/* MODAL: SONDA CENTINELA DE RED                                                  */
+/* ============================================================================== */
+.probe-modal-card {
+  max-width: 900px;
+  width: 92%;
+}
+
+.probe-modal-body {
+  padding: 20px 24px;
+}
+
+.probe-master-switch-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 240, 255, 0.06);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 18px;
+}
+
+.probe-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.probe-stat-card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.probe-stat-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.probe-stat-val {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.probe-incidents-scrollbox {
+  max-height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.probe-incident-chip {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+

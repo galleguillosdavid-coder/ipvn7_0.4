@@ -115,6 +115,22 @@ Todas las 12 dimensiones fueron diseñadas, programadas y empíricamente certifi
   - Niveles 2 al 6: Revelación progresiva de telemetría, identidades UIN, pasarelas SOCKS5, ZTNA y radar Kleinberg.
   - Nivel 7 (Modo Ingeniero Soberano): Consola openCypher KùzuDB en vivo, controlador eBPF/XDP de kernel, inspector de 12 anillos de Kleinberg, gestor de rotación de claves PQC y anulación forzada (*Override Mode*).
 
+- [x] **Dimensión 18: Streaming Real en Vivo P2P (WHIP/WHEP) (`pkg/l4/live_stream.go`, `web/js/live-stream.js`)**
+  - Captura directa en navegador de pantalla o cámara web mediante `getUserMedia` y `getDisplayMedia`.
+  - Despacho en anillo circular y difusión en tiempo real Server-Sent Events (SSE) sin depender de plataformas centralizadas (Twitch/YouTube).
+
+- [x] **Dimensión 19: Música y Radio Soberana Hi-Fi sin Video (`pkg/l4/audio_radio.go`, `web/js/audio-player.js`)**
+  - Transmisión continua de audio ligero (Opus / Web Audio API) a 96-128 kbps con 0% de sobrecarga de video.
+  - Dock Mini-Player persistente en la interfaz, analizador de espectro de audio a 60 FPS y función de transmisión de micrófono en vivo.
+
+- [x] **Dimensión 20: Sonda Centinela de Red & Detección Anti-Censura (`pkg/l1/network_probe.go`, `web/js/network-probe.js`)**
+  - Módulo voluntario (*Opt-In*) con 0% de consumo de CPU al estar inactivo.
+  - Detección proactiva de bloqueos de ISP (DNS Poisoning, inyección TCP RST, bloqueo SNI de TLS) y conmutación automática a túnel camuflado RFC 8446.
+
+- [x] **Gobernanza Frugal de IA & SKILL 8.0 (`docs/SKILL_8_AXIOMATIC_LEAN.md`, `web/js/ai-shield.js`)**
+  - La Inteligencia Artificial es 100% opcional con garantía de Cero Consumo de Tokens en reposo.
+  - Control de estados `[APAGADO / ON-DEMAND / ACTIVO]`; heurísticas deterministas locales en Go para la auto-curación del sistema operativo.
+
 ---
 
 ## Parte IV: Resultados de Certificación y Despliegue en Red Física

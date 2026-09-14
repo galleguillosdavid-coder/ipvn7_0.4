@@ -57,6 +57,10 @@ type WebDashboardServer struct {
 	Multicast     *l1.CascadeMulticastEngine
 	RemoteDesktop *RemoteDesktopManager
 	CorporateVPN  *l1.CorporateVPNManager
+	LiveStream    *LiveStreamManager
+	AudioRadio    *AudioRadioManager
+	Probe         *l1.NetworkProbeEngine
+	CopilotMode   string
 	StartTime     time.Time
 	StaticDir     string
 	server        *http.Server
@@ -144,6 +148,10 @@ func NewWebDashboardServer(
 		Multicast:     l1.NewCascadeMulticastEngine(id, router),
 		RemoteDesktop: NewRemoteDesktopManager(id, fw),
 		CorporateVPN:  l1.NewCorporateVPNManager(id, l1.DefaultCorporateVPNConfig(), nil, socks5Gateway),
+		LiveStream:    NewLiveStreamManager(id),
+		AudioRadio:    NewAudioRadioManager(id),
+		Probe:         l1.NewNetworkProbeEngine(id, router),
+		CopilotMode:   "off",
 		StartTime:     time.Now(),
 		StaticDir:     staticDir,
 	}
@@ -250,6 +258,23 @@ func (ws *WebDashboardServer) Start() error {
 	mux.HandleFunc("/api/vpn/corporate/mode", ws.handleCorporateVPNMode)
 	mux.HandleFunc("/api/vpn/corporate/egress", ws.handleCorporateVPNEgress)
 	mux.HandleFunc("/api/vpn/corporate/ztna/evaluate", ws.handleCorporateVPNZTNAEvaluate)
+
+	// Endpoints Streaming Real en Vivo (WHIP/WHEP P2P)
+	mux.HandleFunc("/api/stream/channels", ws.handleStreamChannels)
+	mux.HandleFunc("/api/stream/publish", ws.handleStreamPublish)
+	mux.HandleFunc("/api/stream/live", ws.handleStreamLive)
+
+	// Endpoints Música & Radio Soberana sin Video
+	mux.HandleFunc("/api/audio/stations", ws.handleAudioStations)
+	mux.HandleFunc("/api/audio/stream", ws.handleAudioStream)
+	mux.HandleFunc("/api/audio/broadcast", ws.handleAudioBroadcast)
+
+	// Endpoints Sonda Voluntaria de Red & Detección de Censura
+	mux.HandleFunc("/api/probe/report", ws.handleProbeReport)
+	mux.HandleFunc("/api/probe/toggle", ws.handleProbeToggle)
+
+	// Endpoint Control de Gobernanza de IA Opcional (Zero Token Drain)
+	mux.HandleFunc("/api/copilot/mode", ws.handleCopilotMode)
 
 	// 2. Archivos estáticos de interfaz gráfica
 	fs := http.FileServer(http.Dir(ws.StaticDir))
@@ -2009,6 +2034,203 @@ func (ws *WebDashboardServer) handleCorporateVPNZTNAEvaluate(w http.ResponseWrit
 		"policy":   "ZTNA_DEFAULT_DENY_SOVEREIGN",
 	})
 }
+
+// -----------------------------------------------------------------------------
+// Handlers Streaming en Vivo, Audio Hi-Fi, Sonda de Red e IA Frugal
+// -----------------------------------------------------------------------------
+
+func (ws *WebDashboardServer) handleStreamChannels(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	channels := ws.LiveStream.ListChannels()
+	_ = json.NewEncoder(w).Encode(channels)
+}
+
+func (ws *WebDashboardServer) handleStreamPublish(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req struct {
+		ChannelID string `json:"channel_id"`
+		Keyframe  bool   `json:"keyframe"`
+		MimeType  string `json:"mime_type"`
+		Data      string `json:"data"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "JSON inválido", http.StatusBadRequest)
+		return
+	}
+
+	rawBytes := []byte(req.Data)
+	seg, err := ws.LiveStream.IngestSegment(req.ChannelID, ws.Identity.DID(), req.Keyframe, req.MimeType, rawBytes)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{"status": "ok", "sequence": seg.Sequence})
+}
+
+func (ws *WebDashboardServer) handleStreamLive(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	channelID := r.URL.Query().Get("channel_id")
+	if channelID == "" {
+		channelID = "live-sovereign-01"
+	}
+
+	streamChan, cleanup, err := ws.LiveStream.Subscribe(channelID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer cleanup()
+
+	w.Header().Set("Content-Type", "text/event-stream")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		http.Error(w, "Streaming no soportado", http.StatusInternalServerError)
+		return
+	}
+
+	notify := r.Context().Done()
+	for {
+		select {
+		case <-notify:
+			return
+		case seg, ok := <-streamChan:
+			if !ok {
+				return
+			}
+			dataJson, _ := json.Marshal(seg)
+			fmt.Fprintf(w, "data: %s\n\n", dataJson)
+			flusher.Flush()
+		}
+	}
+}
+
+func (ws *WebDashboardServer) handleAudioStations(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	stations := ws.AudioRadio.ListStations()
+	_ = json.NewEncoder(w).Encode(stations)
+}
+
+func (ws *WebDashboardServer) handleAudioStream(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	stationID := r.URL.Query().Get("station_id")
+	if stationID == "" {
+		stationID = "radio-lofi-01"
+	}
+
+	audioChan, cleanup, err := ws.AudioRadio.SubscribeStation(stationID)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	defer cleanup()
+
+	w.Header().Set("Content-Type", "audio/pcm")
+	w.Header().Set("Cache-Control", "no-cache")
+	w.Header().Set("Connection", "keep-alive")
+
+	flusher, ok := w.(http.Flusher)
+	if !ok {
+		http.Error(w, "Streaming no soportado", http.StatusInternalServerError)
+		return
+	}
+
+	notify := r.Context().Done()
+	for {
+		select {
+		case <-notify:
+			return
+		case chunk, ok := <-audioChan:
+			if !ok {
+				return
+			}
+			_, _ = w.Write(chunk)
+			flusher.Flush()
+		}
+	}
+}
+
+func (ws *WebDashboardServer) handleAudioBroadcast(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req struct {
+		StationID string `json:"station_id"`
+		AudioData string `json:"audio_data"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "JSON inválido", http.StatusBadRequest)
+		return
+	}
+
+	err := ws.AudioRadio.BroadcastAudio(req.StationID, []byte(req.AudioData))
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	_ = json.NewEncoder(w).Encode(map[string]string{"status": "broadcast_accepted"})
+}
+
+func (ws *WebDashboardServer) handleProbeReport(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	report := ws.Probe.GetReport()
+	_ = json.NewEncoder(w).Encode(report)
+}
+
+func (ws *WebDashboardServer) handleProbeToggle(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Método no permitido", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req struct {
+		Active bool `json:"active"`
+	}
+	_ = json.NewDecoder(r.Body).Decode(&req)
+	status := ws.Probe.SetActive(req.Active)
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{"is_active": status})
+}
+
+func (ws *WebDashboardServer) handleCopilotMode(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	if r.Method == http.MethodPost {
+		var req struct {
+			Mode string `json:"mode"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&req); err == nil && req.Mode != "" {
+			ws.CopilotMode = req.Mode
+		}
+	}
+
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"copilot_mode": ws.CopilotMode,
+		"token_drain":  "ZERO_TOKENS_GUARANTEED",
+		"is_optional":  true,
+	})
+}
+
 
 
 

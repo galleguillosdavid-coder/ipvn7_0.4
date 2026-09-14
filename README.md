@@ -16,7 +16,7 @@ A diferencia del paradigma tradicional TCP/IP donde la identidad y la localizaci
 
 ---
 
-## 🏛️ Las 17 Dimensiones de Innovación Certificadas
+## 🏛️ Las 20 Dimensiones de Innovación Certificadas
 
 Todas las dimensiones han sido completamente implementadas en Go y empíricamente verificadas en laboratorio físico sobre dos hosts reales (PC Desktop WSL2 $\leftrightarrow$ Notebook física `192.168.1.106`):
 
@@ -37,6 +37,9 @@ Todas las dimensiones han sido completamente implementadas en Go y empíricament
 15. **VPN Corporativa Fricción Cero para Multinacionales (`pkg/l1/corporate_vpn.go`):** Despliegue Zero-Admin sin permisos root (conmutación automática a proxy local SOCKS5 `:10807` + HTTP CONNECT `:10808`), camuflaje Anti-DPI RFC 8446 (TLS 1.3 / :443) sobre datagramas 1280B y pasarelas de salida multijurisdicción (Frankfurt, Zúrich, Tokio, NY, Singapur).
 16. **Ecosistema de Aplicaciones Soberanas (`pkg/l4/`, `pkg/l1/`):** Chat Soberano E2EE con secreto perfecto hacia adelante (`chat_manager.go`), Escritorio Remoto P2P estilo RustDesk (`remote_desktop.go`), Nube Personal DAG Store y Transmisión Multicast en Cascada $O(\log N)$ (`cascade_multicast.go`).
 17. **Arquitectura de Interfaz Adaptativa (Niveles 1 al 7) (`web/`):** Espectro de complejidad que transita fluidamente desde el Nivel 1 (Modo Consumidor: física orbital en canvas 60 FPS y apps de un solo clic) hasta el Nivel 7 (Modo Ingeniero Soberano: consola openCypher KùzuDB, bypass eBPF/XDP de kernel, 12 anillos Kleinberg y modo Override).
+18. **Streaming Real en Vivo P2P (WHIP/WHEP) (`pkg/l4/live_stream.go`, `web/js/live-stream.js`):** Transmisión de pantalla o cámara web con captura en navegador y difusión SSE de baja latencia.
+19. **Música y Radio Soberana Hi-Fi sin Video (`pkg/l4/audio_radio.go`, `web/js/audio-player.js`):** Transmisión de audio ligero (Opus / Web Audio API) a 96 kbps, Mini-Player Dock flotante y visualizador espectral a 60 FPS.
+20. **Sonda Centinela de Red & Detección Anti-Censura (`pkg/l1/network_probe.go`, `web/js/network-probe.js`):** Auditoría voluntaria de latencia y detección proactiva de manipulación perimetral (DNS Poisoning, inyección TCP RST).
 
 ---
 

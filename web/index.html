@@ -26,6 +26,16 @@
         </div>
       </div>
       <div class="header-right">
+        <button class="ai-shield-pill" id="ai-shield-btn" onclick="toggleAICopilotMode()" title="Control Frugal de Tokens: IA 100% Opcional">
+          <span class="ai-pill-icon">🧠</span>
+          <span class="ai-pill-text" id="ai-pill-text">IA: Apagada (0 Tokens)</span>
+          <span class="status-dot" id="ai-pill-dot"></span>
+        </button>
+        <button class="probe-header-pill" id="probe-header-btn" onclick="openNetworkProbeModal()" title="Sonda Voluntaria de Red & Detección de Censura">
+          <span class="probe-header-icon">📡</span>
+          <span class="probe-header-text" id="probe-header-text">Sonda: Off</span>
+          <span class="status-dot" id="probe-pill-dot"></span>
+        </button>
         <button class="vpn-header-pill" onclick="openCorporateVPNModal()" title="Abrir VPN Corporativa Fricción Cero">
           <span class="vpn-header-icon">🛡️</span>
           <span class="vpn-header-text">VPN Fricción Cero</span>
@@ -130,6 +140,22 @@
           <div class="consumer-app-info">
             <h4>Transmisión en Cascada</h4>
             <p>Distribución en árbol de fan-out para streaming masivo sin colapsar el ancho de banda.</p>
+          </div>
+        </div>
+
+        <div class="consumer-app-card" onclick="openLiveStreamingModal()">
+          <div class="consumer-app-icon" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">🎙️</div>
+          <div class="consumer-app-info">
+            <h4>Streaming en Vivo Real</h4>
+            <p>Emisión y sintonización P2P en vivo de cámara o pantalla con baja latencia (WHIP/WHEP).</p>
+          </div>
+        </div>
+
+        <div class="consumer-app-card" onclick="openNetworkProbeModal()">
+          <div class="consumer-app-icon" style="color: #00f0ff; border-color: rgba(0, 240, 255, 0.3);">🌐</div>
+          <div class="consumer-app-info">
+            <h4>Sonda Centinela de Red</h4>
+            <p>Monitoreo voluntario de salud, latencia EWMA y detección de censura/bloqueos de ISP.</p>
           </div>
         </div>
 
@@ -2060,9 +2086,196 @@
       </div>
     </div>
 
+    <!-- ==================================================================== -->
+    <!-- MODAL: STREAMING REAL EN VIVO (WHIP/WHEP P2P)                        -->
+    <!-- ==================================================================== -->
+    <div class="app-modal-backdrop" id="modal-livestream">
+      <div class="app-modal-card glass-card stream-modal-card">
+        <div class="app-modal-header">
+          <div class="app-modal-title">
+            <span style="font-size: 1.4rem;">🎙️</span>
+            <div>
+              <h3>Streaming Real en Vivo P2P</h3>
+              <span class="version-tag">WHIP/WHEP · Replicación en Cascada O(log N) · AV1/VP9</span>
+            </div>
+          </div>
+          <button class="btn-chat-icon" onclick="closeLiveStreamingModal()" title="Cerrar">✕</button>
+        </div>
+
+        <div class="stream-modal-body">
+          <!-- Columna Izquierda: Panel de Emisión -->
+          <div class="stream-panel-col">
+            <div class="stream-panel-header">
+              <span style="font-weight: 600; color: #fff; font-size: 0.9rem;">📹 Mi Emisión en Vivo</span>
+              <span class="vpn-phase-pill" id="streamStatusPill">CANAL EN ESPERA</span>
+            </div>
+
+            <div class="stream-video-wrapper">
+              <video id="streamBroadcasterPreview" autoplay muted playsinline class="stream-video-elem"></video>
+              <div class="stream-video-overlay-timer" id="streamTimerDisplay">00:00</div>
+            </div>
+
+            <div class="stream-controls-row">
+              <div class="stream-source-picker">
+                <label style="font-size: 0.75rem; color: var(--text-muted);">Fuente:</label>
+                <select id="streamSourceSelect" class="stream-select-dropdown">
+                  <option value="screen">🖥️ Compartir Pantalla Completa</option>
+                  <option value="camera">📷 Cámara Web + Micrófono</option>
+                </select>
+              </div>
+
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-primary btn-det" id="btnStreamStart" onclick="startLiveBroadcast()" style="background: #ef4444; border-color: #ef4444;">● Iniciar Emisión</button>
+                <button class="btn-primary btn-det" id="btnStreamStop" onclick="stopLiveBroadcast()" style="display: none; background: #64748b;">■ Detener</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Canales Activos y Sintonizador -->
+          <div class="stream-panel-col">
+            <div class="stream-panel-header">
+              <span style="font-weight: 600; color: #fff; font-size: 0.9rem;">📺 Sintonizador de Canales</span>
+              <span style="font-size: 0.72rem; color: var(--primary); font-family: var(--font-mono);" id="streamPlayerTitle">Esperando canal...</span>
+            </div>
+
+            <div class="stream-video-wrapper">
+              <video id="streamPlayerVideo" autoplay playsinline controls class="stream-video-elem"></video>
+            </div>
+
+            <div style="margin-top: 10px;">
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; display: block; margin-bottom: 6px;">Canales Activos en la Malla:</span>
+              <div id="streamChannelsList" class="stream-channels-scrollbox">
+                <!-- Se llena dinámicamente -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vpn-footer-toolbar">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">Difusión sin servidores: Cada espectador retransmite a 3 pares en cascada.</span>
+          <button class="btn-chat-icon" onclick="closeLiveStreamingModal()" style="font-size: 0.82rem; color: var(--text-muted);">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- MODAL: SONDA VOLUNTARIA DE RED & CENSURA                             -->
+    <!-- ==================================================================== -->
+    <div class="app-modal-backdrop" id="modal-network-probe">
+      <div class="app-modal-card glass-card probe-modal-card">
+        <div class="app-modal-header">
+          <div class="app-modal-title">
+            <span style="font-size: 1.4rem;">🌐</span>
+            <div>
+              <h3>Sonda Centinela de Red & Libertad de Tráfico</h3>
+              <span class="version-tag">Auditoría Voluntaria · Detección Anti-Censura · Zero-PII</span>
+            </div>
+          </div>
+          <button class="btn-chat-icon" onclick="closeNetworkProbeModal()" title="Cerrar">✕</button>
+        </div>
+
+        <div class="probe-modal-body">
+          <!-- Banner Superior de Control Maestro -->
+          <div class="probe-master-switch-bar">
+            <div>
+              <strong style="color: #fff; font-size: 0.92rem;">Monitoreo Inmunológico Voluntario</strong>
+              <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: var(--text-muted);">Al estar apagada, consume exactamente 0% de CPU y no emite tráfico de sondeo.</p>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <button class="btn-primary btn-det" onclick="toggleNetworkProbe()" id="btnToggleProbeModal">Alternar Sonda (On/Off)</button>
+            </div>
+          </div>
+
+          <!-- Métricas Cuádruples de Salud -->
+          <div class="probe-stats-grid">
+            <div class="probe-stat-card">
+              <span class="probe-stat-label">Puntaje de Libertad/Salud</span>
+              <span class="probe-stat-val" id="probeHealthScore">99.4%</span>
+              <span style="font-size: 0.7rem; color: #10b981;">Ruta 100% Blindada</span>
+            </div>
+            <div class="probe-stat-card">
+              <span class="probe-stat-label">Latencia EWMA</span>
+              <span class="probe-stat-val" id="probeLatencyVal">4.5 ms</span>
+              <span style="font-size: 0.7rem; color: var(--text-muted);" id="probePeersCount">3 pares Kleinberg</span>
+            </div>
+            <div class="probe-stat-card">
+              <span class="probe-stat-label">Jitter Inter-Paquete</span>
+              <span class="probe-stat-val" id="probeJitterVal">0.65 ms</span>
+              <span style="font-size: 0.7rem; color: #38bdf8;">Estable anti-bloat</span>
+            </div>
+            <div class="probe-stat-card">
+              <span class="probe-stat-label">Pérdida de Paquetes</span>
+              <span class="probe-stat-val" id="probeLossVal">0.0%</span>
+              <span style="font-size: 0.7rem; color: #10b981;">Cero Caídas</span>
+            </div>
+          </div>
+
+          <!-- Lista de Incidentes de Censura & Mitigación -->
+          <div style="margin-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <strong style="color: #fff; font-size: 0.85rem;">Historial de Interferencias Detectadas y Mitigadas:</strong>
+              <button class="btn-primary btn-det" onclick="window.probeManager.refreshReport()" style="font-size: 0.72rem; padding: 3px 8px;">Auditar Ahora</button>
+            </div>
+            <div id="probeIncidentsList" class="probe-incidents-scrollbox">
+              <!-- Se llena dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <div class="vpn-footer-toolbar">
+          <span style="font-size: 0.74rem; color: var(--text-muted);">La sonda no recopila direcciones IP públicas, URLs privadas ni historiales de navegación.</span>
+          <button class="btn-chat-icon" onclick="closeNetworkProbeModal()" style="font-size: 0.82rem; color: var(--text-muted);">Cerrar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- DOCK FLOTANTE PERSISTENTE: MÚSICA & RADIO SOBERANA HI-FI             -->
+    <!-- ==================================================================== -->
+    <footer class="audio-mini-player-dock glass-card" id="audioMiniPlayerDock">
+      <div class="audio-dock-left">
+        <div class="audio-dock-avatar" id="audioDockAvatar">📻</div>
+        <div class="audio-dock-info">
+          <div class="audio-dock-title-row">
+            <span class="audio-dock-track" id="audioTrackTitle">Radio Soberana Jazz Lo-Fi</span>
+            <span class="badge badge-purple" id="audioGenreBadge" style="font-size: 0.65rem; padding: 1px 6px;">Lo-Fi / Beats</span>
+          </div>
+          <span class="audio-dock-listeners" id="audioListenersBadge">🎧 14 oyentes · 96 kbps Opus</span>
+        </div>
+      </div>
+
+      <div class="audio-dock-center">
+        <div class="audio-controls-row">
+          <button class="btn-audio-ctrl" onclick="window.audioEngine.stop()" title="Anterior">◄◄</button>
+          <button class="btn-audio-play" id="audioBtnPlay" onclick="toggleAudioPlay()" title="Reproducir">▶</button>
+          <button class="btn-audio-ctrl" onclick="window.audioEngine.stop()" title="Siguiente">►►</button>
+        </div>
+
+        <!-- Canvas de Espectro Armónico en Tiempo Real -->
+        <canvas id="audioSpectrumCanvas" width="160" height="28" class="audio-spectrum-canvas" title="Espectro Armónico Web Audio"></canvas>
+      </div>
+
+      <div class="audio-dock-right">
+        <select id="audioStationSelect" class="audio-station-select" title="Seleccionar Estación">
+          <!-- Opciones dinámicas -->
+        </select>
+
+        <button class="btn-primary btn-det btn-audio-mic" id="audioBtnBroadcast" onclick="toggleMicBroadcast()" title="Emitir mi micrófono a la estación">🎙️ Transmitir Mic</button>
+
+        <div class="audio-volume-wrap">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">🔊</span>
+          <input type="range" id="audioVolumeSlider" min="0" max="1" step="0.05" value="0.8" class="audio-volume-slider" title="Volumen">
+        </div>
+      </div>
+    </footer>
+
   </div>
 
-
+  <!-- Scripts del Núcleo y Módulos ES6 de SKILL 8.0 -->
   <script src="/app.js"></script>
+  <script src="/js/audio-player.js"></script>
+  <script src="/js/live-stream.js"></script>
+  <script src="/js/network-probe.js"></script>
+  <script src="/js/ai-shield.js"></script>
 </body>
 </html>
