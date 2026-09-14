@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ipvn7 Network OS — Panel de Control de Malla Soberana</title>
+  <meta name="description" content="Dashboard interactivo de monitoreo en tiempo real para el Sistema Operativo de Red ipvn7">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header Soberano -->
+    <header class="header glass-card">
+      <div class="brand">
+        <div class="logo-icon">
+          <div class="orbit orbit-1"></div>
+          <div class="orbit orbit-2"></div>
+          <div class="nucleus"></div>
+        </div>
+        <div class="brand-text">
+          <h1>ipvn7 <span class="gradient-text">Network OS</span></h1>
+          <span class="version-tag">v0.4.0 · Sovereign Overlay Mesh</span>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="vpn-header-pill" onclick="openCorporateVPNModal()" title="Abrir VPN Corporativa Fricción Cero">
+          <span class="vpn-header-icon">🛡️</span>
+          <span class="vpn-header-text">VPN Fricción Cero</span>
+          <span class="vpn-pill-dot pulsing"></span>
+        </button>
+        <div class="node-pill">
+          <span class="status-dot pulsing"></span>
+          <span id="node-env">WSL2 Linux Kernel Node</span>
+        </div>
+        <div class="uptime-badge" id="uptime-display">Uptime: 00:00:00</div>
+      </div>
+    </header>
+
+    <!-- Barra de Selección de Niveles de Operación (1 al 7) -->
+    <section class="card glass-card level-selector-card">
+      <div class="level-top-row">
+        <div class="level-title-group">
+          <span class="level-badge-active" id="current-level-badge">NIVEL 1 · MODO CONSUMIDOR</span>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Espectro de Complejidad Adaptativa:</span>
+        </div>
+        <div class="level-pills" id="level-pills-container">
+          <button class="level-pill" data-level="1" onclick="setOperatingLevel(1)">1 · Consumidor</button>
+          <button class="level-pill" data-level="2" onclick="setOperatingLevel(2)">2 · Explorador</button>
+          <button class="level-pill" data-level="3" onclick="setOperatingLevel(3)">3 · Transporte</button>
+          <button class="level-pill" data-level="4" onclick="setOperatingLevel(4)">4 · Táctico</button>
+          <button class="level-pill" data-level="5" onclick="setOperatingLevel(5)">5 · Malla</button>
+          <button class="level-pill" data-level="6" onclick="setOperatingLevel(6)">6 · Topología</button>
+          <button class="level-pill" data-level="7" onclick="setOperatingLevel(7)">7 · Ingeniero</button>
+        </div>
+      </div>
+      <div class="level-desc-bar">
+        <span id="level-description-text">Modo Consumidor: Fricción cero, enrutamiento invisible y privacidad absoluta con física de nodos orbitales.</span>
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--primary);" id="level-filter-indicator">Filtrando complejidad: Modo Consumidor Puro</span>
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- NIVEL 1: EL MODO CONSUMIDOR (MAPA ORBITAL Y SOFISTICACIÓN INVISIBLE)  -->
+    <!-- ==================================================================== -->
+    <section class="consumer-orbital-container" id="consumer-orbital-section">
+      <div class="consumer-hero-clean">
+        <h2>Bienvenido a IPv7 / <span class="gradient-text">La nueva generación de internet</span></h2>
+        <p>Tu equipo está conectado a una malla de comunicación descentralizada y soberana. Tu identidad criptográfica viaja blindada; ningún intermediario ni proveedor puede rastrearte ni intervenir tus canales.</p>
+        
+        <!-- Canvas Orbital de Física de Nodos -->
+        <div class="consumer-canvas-wrapper">
+          <canvas id="consumerOrbitalCanvas" width="820" height="480"></canvas>
+          
+          <!-- Tooltip Flotante Orgánico de Nodo Seleccionado -->
+          <div class="orbital-tooltip-card" id="orbital-tooltip-card">
+            <div class="orbital-tooltip-avatar" id="orb-avatar">💻</div>
+            <div class="orbital-tooltip-body">
+              <div class="orbital-tooltip-name">
+                <span id="orb-name">notebook.ipv7</span>
+                <span style="font-size: 0.68rem; color: #10b981; font-weight: normal;" id="orb-status">Directo P2P · E2EE ✓</span>
+              </div>
+              <div class="orbital-tooltip-meta" id="orb-meta">Latencia RTT: 1.12 ms · Cifrado Noise XX</div>
+            </div>
+            <div class="orbital-tooltip-actions">
+              <button class="btn-orbital-action" onclick="openSovereignChat()">💬 Chat</button>
+              <button class="btn-orbital-action" onclick="openDAGCloud()">📁 Archivo</button>
+              <button class="btn-orbital-action" onclick="openRemoteDesktop()">🖥️ Escritorio</button>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 14px;">
+          <div class="consumer-auto-badge">
+            <span>🛡️ Enrutamiento XOR Autónomo · EWMA RTT Optimizado · Zero-PII Blindado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuadrícula de Aplicaciones Soberanas Fricción-Cero -->
+      <div class="consumer-apps-grid">
+        <div class="consumer-app-card" onclick="openSovereignChat()">
+          <div class="consumer-app-icon" style="color: #10b981; border-color: rgba(16, 185, 129, 0.3);">💬</div>
+          <div class="consumer-app-info">
+            <h4>Chat Soberano E2EE</h4>
+            <p>Mensajería directa estilo WhatsApp protegida por secreto perfecto hacia adelante.</p>
+          </div>
+        </div>
+
+        <div class="consumer-app-card" onclick="openDAGCloud()">
+          <div class="consumer-app-icon" style="color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">📁</div>
+          <div class="consumer-app-info">
+            <h4>Mi Nube Personal</h4>
+            <p>Almacén DAG Store-and-Forward con direccionamiento inmutable por contenido (CID).</p>
+          </div>
+        </div>
+
+        <div class="consumer-app-card" onclick="openRemoteDesktop()">
+          <div class="consumer-app-icon" style="color: #a855f7; border-color: rgba(168, 85, 247, 0.3);">🖥️</div>
+          <div class="consumer-app-info">
+            <h4>Escritorio Remoto P2P</h4>
+            <p>Transmisión de pantalla de ultrabaja latencia sin servidores intermediarios.</p>
+          </div>
+        </div>
+
+        <div class="consumer-app-card" onclick="openCascadeMulticast()">
+          <div class="consumer-app-icon" style="color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">📡</div>
+          <div class="consumer-app-info">
+            <h4>Transmisión en Cascada</h4>
+            <p>Distribución en árbol de fan-out para streaming masivo sin colapsar el ancho de banda.</p>
+          </div>
+        </div>
+
+        <div class="consumer-app-card vpn-highlight-card" onclick="openCorporateVPNModal()">
+          <div class="consumer-app-icon" style="color: #00f0ff; border-color: rgba(0, 240, 255, 0.4); box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);">🛡️</div>
+          <div class="consumer-app-info">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h4>VPN Fricción Cero</h4>
+              <span class="vpn-chip-badge">ENTERPRISE</span>
+            </div>
+            <p>Túnel corporativo invisible: Zero-Admin (SOCKS5/HTTP), camuflaje Anti-DPI TLS 1.3 y salida multijurisdicción.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Barra de Coordenadas Soberanas con Tooltips Humanos (Nivel 2+) -->
+    <section class="identity-bar glass-card" data-min-level="2">
+      <div class="coord-item">
+        <span class="coord-label tip-trigger">
+          Identidad Criptográfica (DID)
+          <div class="tip-bubble">
+            <strong>¿Qué es tu DID?</strong>
+            Es tu pasaporte digital matemático único en la red. A diferencia de una dirección IP común, nunca revela en qué país ni en qué casa estás.
+          </div>
+        </span>
+        <div class="coord-value-row">
+          <code class="coord-code" id="did-display">Cargando identidad...</code>
+          <button class="btn-copy" id="btn-copy-did" title="Copiar DID">📋</button>
+        </div>
+      </div>
+
+      <div class="coord-item">
+        <span class="coord-label tip-trigger">
+          Dirección Privada IPv6
+          <div class="tip-bubble">
+            <strong>IPv6 Soberana</strong>
+            Dirección virtual cifrada que te permite interactuar con otros nodos sin que los proveedores de internet puedan rastrear tu equipo.
+          </div>
+        </span>
+        <code class="coord-code cyan" id="ipv6-display">fd07::/64</code>
+      </div>
+
+      <div class="coord-item">
+        <span class="coord-label tip-trigger">
+          Red Virtual IPv4
+          <div class="tip-bubble">
+            <strong>IPv4 Sintética</strong>
+            Dirección compatible para que aplicaciones existentes (navegadores, juegos, terminales) funcionen en la red sin configuraciones complejas.
+          </div>
+        </span>
+        <code class="coord-code purple" id="ipv4-display">10.7.0.0/16</code>
+      </div>
+
+      <div class="coord-item">
+        <span class="coord-label tip-trigger">
+          Escudo Determinista (MTU)
+          <div class="tip-bubble">
+            <strong>Trama Determinista de 1280B</strong>
+            Todos los paquetes miden exactamente 1280 bytes. Así ningún espía de red puede deducir si estás enviando un texto, un archivo o un video analizando el tamaño.
+          </div>
+        </span>
+        <code class="coord-code green">1280 Bytes Fijo</code>
+      </div>
+
+      <div class="coord-item stealth-coord-item">
+        <span class="coord-label tip-trigger">
+          Modo de Visibilidad
+          <div class="tip-bubble">
+            <strong>Modo Oculto (Dark Node)</strong>
+            Permite navegar de forma exclusivamente saliente: puedes comunicarte con el mundo pero nadie puede encontrarte ni escanear puertos en tu equipo.
+          </div>
+        </span>
+        <button class="btn-stealth-macro" id="btn-stealth-macro" onclick="toggleDarkNodeMacro()">
+          <span id="stealth-icon">🌐</span>
+          <span id="stealth-text">MODO VISIBLE</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Panel de Telemetría de Red Básica & Sparkline (Nivel 2-3) -->
+    <section class="basic-telemetry-panel" id="basic-telemetry-panel" data-min-level="2">
+      <div class="sparkline-box glass-card">
+        <div class="sparkline-header">
+          <span style="font-size: 0.85rem; font-weight: 600; color: #fff;">📈 Ancho de Banda Agregado (Tx/Rx)</span>
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--primary);" id="spark-throughput-val">14.8 Mbps</span>
+        </div>
+        <canvas id="sparklineBandwidthCanvas" class="sparkline-canvas" width="320" height="48"></canvas>
+      </div>
+
+      <div class="sparkline-box glass-card">
+        <div class="sparkline-header">
+          <span style="font-size: 0.85rem; font-weight: 600; color: #fff;">⏱️ Latencia Promedio Global (EWMA RTT)</span>
+          <span style="font-family: var(--font-mono); font-size: 0.8rem; color: #10b981;" id="spark-latency-val">1.10 ms</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+          <span style="font-size: 0.78rem; color: var(--text-muted);">Estado: Óptimo (Zero Drop)</span>
+          <span style="font-size: 0.78rem; color: #38bdf8;">Conexión: Internet + Malla P2P</span>
+        </div>
+      </div>
+
+      <div class="sparkline-box glass-card">
+        <div class="sparkline-header">
+          <span style="font-size: 0.85rem; font-weight: 600; color: #fff;">🌐 Estado del Gateway & TUN</span>
+          <span class="badge badge-green" style="font-size: 0.72rem;">SOCKS5 :10807 ACTIVO</span>
+        </div>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 6px;">
+          Driver TUN/TAP: <strong style="color: #fff;">ipv70</strong> · Prefijo ULA fd07::/64
+        </div>
+      </div>
+    </section>
+
+    <!-- Barra de Macro-Acciones Atómicas (Intención en Cascada - Nivel 3+) -->
+    <section class="macro-actions-bar" data-min-level="3">
+      <button class="btn-macro btn-det" id="btn-macro-shield" onclick="triggerMacroShield()">
+        <span class="macro-icon">🛡️</span>
+        <div class="macro-info">
+          <span class="macro-title">Blindaje Total Soberano</span>
+          <span class="macro-desc">Dark Node + Sphinx 3-Saltos + SOCKS5</span>
+        </div>
+      </button>
+
+      <button class="btn-macro btn-det" id="btn-macro-agent" onclick="triggerMacroAIAgent()">
+        <span class="macro-icon">🤖</span>
+        <div class="macro-info">
+          <span class="macro-title">Modo Agente IA</span>
+          <span class="macro-desc">UIN Delegation + Scopes + Memory Reserve</span>
+        </div>
+      </button>
+
+      <button class="btn-macro btn-det" id="btn-macro-heal" onclick="triggerMacroAutonomousHealing()">
+        <span class="macro-icon">⚡</span>
+        <div class="macro-info">
+          <span class="macro-title">Diagnóstico & Auto-Curación</span>
+          <span class="macro-desc">IA Copilot + Anti-Replay + PFO Audit</span>
+        </div>
+      </button>
+    </section>
+
+    <!-- Barra de Navegación por Pestañas (Tabs - Nivel 2+) -->
+    <nav class="tabs-navigation-bar" data-min-level="2">
+      <button class="tab-nav-btn active" data-tab="tab-overview" onclick="switchTab('tab-overview')">
+        📡 Radar & Topología
+      </button>
+      <button class="tab-nav-btn" data-tab="tab-services" onclick="switchTab('tab-services')">
+        🌐 Servicios, dDNS & UIN
+      </button>
+      <button class="tab-nav-btn" data-tab="tab-security" onclick="switchTab('tab-security')">
+        🛡️ Escudo Cripto & ZTNA
+      </button>
+      <button class="tab-nav-btn" data-tab="tab-vpn" onclick="switchTab('tab-vpn')">
+        🏢 VPN Fricción Cero
+      </button>
+      <button class="tab-nav-btn" data-tab="tab-axiomatic" onclick="switchTab('tab-axiomatic')">
+        🧠 Grafo KùzuDB & IA
+      </button>
+      <button class="tab-nav-btn" data-tab="tab-all" onclick="switchTab('tab-all')">
+        📑 Vista Completa (Todos)
+      </button>
+    </nav>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 1: RADAR & TOPOLOGÍA (Nivel 1 & 5)                            -->
+    <!-- ==================================================================== -->
+    <div class="tab-pane active" id="pane-tab-overview">
+      <main class="main-grid">
+        <!-- Columna Izquierda: Radar Kleinberg / Geodésico -->
+        <section class="card glass-card radar-section" data-min-level="1">
+          <div class="card-header">
+            <div>
+              <h2 id="topology-title">Radar Concéntrico de Kleinberg</h2>
+              <div class="scale-toggle-group">
+                <button class="btn-scale active" id="btn-scale-local" onclick="setTopologyScale('local')">Ego-Ring (12 Anillos)</button>
+                <button class="btn-scale" id="btn-scale-geodesic" onclick="setTopologyScale('geodesic')">Geodésico (7B Nodos)</button>
+              </div>
+            </div>
+            <span class="badge" id="peers-count-badge">0 / 120 Pares</span>
+          </div>
+          <p class="section-desc" id="topology-desc">12 Anillos logarítmicos por distancia métrica XOR. Reenvío voraz (HopLimit=12).</p>
+          <div class="canvas-wrapper">
+            <canvas id="radarCanvas" width="480" height="480"></canvas>
+            <div class="radar-scan"></div>
+          </div>
+          <div class="radar-legend">
+            <span class="legend-item"><span class="dot ring-inner"></span> Anillos Inmediatos (0-3)</span>
+            <span class="legend-item"><span class="dot ring-mid"></span> Enlaces Medios (4-8)</span>
+            <span class="legend-item"><span class="dot ring-outer"></span> Confines XOR (9-11)</span>
+          </div>
+        </section>
+
+        <!-- Columna Derecha: Marcapasos y Salud -->
+        <div class="controls-column">
+          <!-- Marcapasos de Red -->
+          <section class="card glass-card" data-min-level="1">
+            <div class="card-header">
+              <h2>Marcapasos de Red (Packet Pacing)</h2>
+              <span class="badge badge-green" id="pacing-status">Flujo Sostenible</span>
+            </div>
+            <p class="section-desc">Subordinación al cuello de botella de la ruta. Elimina Bufferbloat y ráfagas inestables.</p>
+            <div class="metrics-row">
+              <div class="metric-box">
+                <span class="m-val" id="pace-rate">9.44</span>
+                <span class="m-unit">Mbps Sostenible</span>
+              </div>
+              <div class="metric-box">
+                <span class="m-val" id="pace-interval">1085</span>
+                <span class="m-unit">µs por Paquete</span>
+              </div>
+              <div class="metric-box">
+                <span class="m-val green" id="pace-bufferbloat">0.0</span>
+                <span class="m-unit">ms Bufferbloat</span>
+              </div>
+            </div>
+            <div class="pacing-bar-container">
+              <div class="pacing-bar-fill" id="pacing-bar" style="width: 78%;"></div>
+            </div>
+          </section>
+
+          <!-- FSM de Salud de Pares -->
+          <section class="card glass-card" data-min-level="2">
+            <div class="card-header">
+              <h2>FSM de Salud (Make-Before-Break)</h2>
+              <span class="badge badge-purple">Evaluación por Jitter</span>
+            </div>
+            <p class="section-desc">Conmutación proactiva antes de caída física. Transición Make-Before-Break.</p>
+            <div class="fsm-status-grid">
+              <div class="fsm-badge healthy"><span>●</span> HEALTHY</div>
+              <div class="fsm-badge degraded"><span>●</span> DEGRADED</div>
+              <div class="fsm-badge unstable"><span>●</span> UNSTABLE</div>
+              <div class="fsm-badge unreachable"><span>●</span> UNREACHABLE</div>
+            </div>
+            <div class="fsm-peers-list" id="fsm-peers-container">
+              <div class="peer-item-placeholder">Esperando telemetría de pares activos en la malla...</div>
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <!-- Tarjeta: Telemetría de Fallas por Huella Digital -->
+      <section class="card glass-card" data-min-level="1">
+        <div class="card-header">
+          <h2>Telemetría Agregada de Fallas (Fingerprinting O(1))</h2>
+          <span class="badge badge-green" id="anomalies-status-badge">Zero-Noise Radar</span>
+        </div>
+        <p class="section-desc">Compresión matemática de ráfagas masivas bajo una sola huella SHA-256. Resumen ejecutivo de anomalía dominante.</p>
+        <div class="metrics-row">
+          <div class="metric-box">
+            <span class="m-val purple" id="anomalies-compressed-count">0</span>
+            <span class="m-unit">Eventos Comprimidos</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-val cyan" id="anomalies-signatures-count">0</span>
+            <span class="m-unit">Firmas Únicas</span>
+          </div>
+          <div class="metric-box" style="flex: 2;">
+            <span class="m-val amber" id="anomalies-dominant-title" style="font-size: 0.95rem;">Ninguna (Red Estable)</span>
+            <span class="m-unit">Anomalía Dominante</span>
+          </div>
+        </div>
+
+        <div class="dominant-alert-box" id="dominant-alert-box">
+          <span class="alert-icon">⚡</span>
+          <div id="anomalies-executive-text">Malla operando dentro de los parámetros estables. Cero anomalías registradas.</div>
+        </div>
+
+        <div style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center;">
+          <span class="coord-label">Firmas Compactadas en Memoria (Top Prioridad):</span>
+          <button class="btn-primary btn-det" onclick="simulateAnomalyBurst()" style="font-size: 0.75rem; padding: 4px 10px;">⚡ Probar Ráfaga 100K Fallas (Fingerprint)</button>
+        </div>
+      </section>
+
+      <!-- Señalización Ciega Efímera & Recuperación Post-Apagón -->
+      <section class="card glass-card" data-min-level="4" style="border-color: rgba(168, 85, 247, 0.3);">
+        <div class="card-header">
+          <h2>Señalización Ciega Efímera (EBRA) & Resiliencia Post-Apagón</h2>
+          <span class="badge badge-purple" id="blackout-phase-badge">CONVERGENCIA P2P PURA</span>
+        </div>
+        <p class="section-desc">Arranque con balizas ciegas sin metadatos (Zero-PII), auto-quema (Consume-and-Burn), y desconexión atómica a P2P con temporizador estocástico Decorrelated Jitter.</p>
+        
+        <div class="metrics-row">
+          <div class="metric-box">
+            <span class="m-val purple" id="blackout-current-phase">Fase 5 / 5</span>
+            <span class="m-unit">Convergencia Malla</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-val green" id="blackout-jitter-interval">14.8s ± 4.2s</span>
+            <span class="m-unit">Intervalo Jitter Estocástico</span>
+          </div>
+          <div class="metric-box">
+            <span class="m-val cyan" id="blackout-circuit-status">DESACOPLADO ✓</span>
+            <span class="m-unit">Circuit Breaker P2P</span>
+          </div>
+        </div>
+
+        <div class="copilot-result" style="font-size: 0.78rem; margin-top: 10px;" id="blackout-recovery-log">
+          Estado: Malla 100% P2P. Balizas externas quemadas y borradas de memoria. Cero ráfagas sincronizadas.
+        </div>
+
+        <button class="btn-primary btn-det" onclick="simulateBlackoutRecoveryCascade()" style="width: 100%; margin-top: 10px; font-size: 0.8rem; background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #c084fc;">
+          ⚡ Simular Apagón Eléctrico & Cascada de Redescubrimiento
+        </button>
+      </section>
+
+      <!-- Fila de Topología Avanzada: Multipath & Tit-for-Tat -->
+      <section class="secondary-grid">
+        <!-- Multipath Overlay -->
+        <section class="card glass-card" style="grid-column: span 2;" data-min-level="4">
+          <div class="card-header">
+            <h2>Multipath Heterogéneo & Emparejamiento SAS (Dimensiones 8 & 10)</h2>
+            <span class="badge badge-green">Zero-Loss & OOB</span>
+          </div>
+          <p class="section-desc">Planificación adaptativa multi-interfaz (WLAN/ETH/5G) y validación visual humana SAS.</p>
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="m-val cyan" id="mp-interfaces">2 Enlaces</span>
+              <span class="m-unit">WLAN + Ethernet</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="mp-routed">0</span>
+              <span class="m-unit">Rutas Dinámicas</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val purple" id="mp-duplicated">0</span>
+              <span class="m-unit">Duplicados Críticos</span>
+            </div>
+          </div>
+          <div class="sas-visual-box">
+            <div>
+              <span class="coord-label">Código SAS de Emparejamiento:</span>
+              <div class="sas-digits" id="sas-digits-display">[ 157528 ]</div>
+            </div>
+            <div>
+              <span class="coord-label">Secuencia Mnemotécnica Visual:</span>
+              <div class="sas-emojis" id="sas-emojis-display">🎷 🎨 🔮 🎁</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tit-for-Tat & Web-of-Trust -->
+        <section class="card glass-card" data-min-level="4">
+          <div class="card-header">
+            <h2>Economía & Web-of-Trust (Dims 5 & 9)</h2>
+            <span class="badge badge-purple">Reciprocidad BFS</span>
+          </div>
+          <p class="section-desc">Contabilidad de tránsito en 4 tiers y reputación atenuada de 3 grados.</p>
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="m-val green" id="tft-priority">0</span>
+              <span class="m-unit">Tier Prioritario</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val cyan" id="tft-normal">0</span>
+              <span class="m-unit">Tier Normal</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val red" id="tft-throttled">0</span>
+              <span class="m-unit">Estrangulados</span>
+            </div>
+          </div>
+          <div class="sas-visual-box">
+            <span class="coord-label">Reputación Malla:</span>
+            <span class="sas-digits" id="wot-score-display">100.0 / 100</span>
+          </div>
+        </section>
+
+        <!-- WDRR Fair Queuing -->
+        <section class="card glass-card" data-min-level="5">
+          <div class="card-header">
+            <h2>WDRR Fair Queuing (Sec. 11 & 37)</h2>
+            <span class="badge badge-blue">Anti-Bufferbloat</span>
+          </div>
+          <p class="section-desc">Weighted Deficit Round Robin. Garantía estricta de ancho de banda y descarte temprano.</p>
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val cyan" id="wdrr-enqueued">0</span>
+              <span class="m-unit">Encolados</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="wdrr-dequeued">0</span>
+              <span class="m-unit">Despachados</span>
+            </div>
+          </div>
+          <div class="wdrr-queues-list">
+            <div class="wdrr-queue-item">
+              <span class="wdrr-queue-name"><span class="wdrr-badge-ctrl">●</span> Control (w=10)</span>
+              <span id="wdrr-q0-len">0 pkts</span>
+            </div>
+            <div class="wdrr-queue-item">
+              <span class="wdrr-queue-name"><span class="wdrr-badge-inter">●</span> Interactivo (w=5)</span>
+              <span id="wdrr-q1-len">0 pkts</span>
+            </div>
+            <div class="wdrr-queue-item">
+              <span class="wdrr-queue-name"><span class="wdrr-badge-bulk">●</span> Bulk Transfer (w=1)</span>
+              <span id="wdrr-q2-len">0 pkts</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 2: SERVICIOS, dDNS & UIN (Nivel 2 & 6)                        -->
+    <!-- ==================================================================== -->
+    <div class="tab-pane" id="pane-tab-services">
+      <section class="secondary-grid">
+        <!-- Gateway SOCKS5 -->
+        <section class="card glass-card" data-min-level="2">
+          <div class="card-header">
+            <h2>Gateway Universal SOCKS5 (RFC 1928)</h2>
+            <span class="badge badge-green" id="socks5-status-badge">ACTIVO · :10807</span>
+          </div>
+          <p class="section-desc">Interceptación transparente de navegadores, git, curl y SSH enrutados a la malla cuántica 1280B.</p>
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val cyan" id="socks5-conn-total">0</span>
+              <span class="m-unit">Conexiones Totales</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="socks5-conn-active">0</span>
+              <span class="m-unit">Activas Ahora</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val purple" id="socks5-tx-bytes">0 B</span>
+              <span class="m-unit">Tráfico Enviado</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val amber" id="socks5-rx-bytes">0 B</span>
+              <span class="m-unit">Tráfico Recibido</span>
+            </div>
+          </div>
+          <div class="copilot-result" style="margin-top: 10px; font-size: 0.8rem;" id="socks5-dest-display">
+            Último destino interceptado: En espera de tráfico local...
+          </div>
+        </section>
+
+        <!-- VPN Corporativa de Cero Fricción para Multinacionales -->
+        <section class="card glass-card" data-min-level="2" style="border-color: rgba(56, 189, 248, 0.3);">
+          <div class="card-header">
+            <h2>VPN Corporativa Zero-Admin & Anti-DPI (Multinacionales)</h2>
+            <span class="badge badge-green" id="corp-vpn-badge">ZERO-ADMIN ACTIVO</span>
+          </div>
+          <p class="section-desc">Despliegue instantáneo en computadoras corporativas restringidas: proxy transparente de espacio de usuario, camuflaje TLS 1.3 en puerto 443 y salida Egress Gateway por jurisdicción.</p>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); margin-bottom: 12px;">
+            <div>
+              <strong style="font-size: 0.85rem; color: #fff;">Modo de Privilegios:</strong>
+              <span style="font-size: 0.72rem; color: var(--text-muted); display: block;" id="corp-vpn-mode-desc">Sin permisos de admin requeridos (SOCKS5 :10807 + HTTP CONNECT :10808)</span>
+            </div>
+            <span class="badge" style="background: rgba(0, 240, 255, 0.15); color: #00f0ff;">USERSPACE PROXY ✓</span>
+          </div>
+
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val cyan" id="corp-tls-disguise-cnt">1,842</span>
+              <span class="m-unit">Tramas TLS 1.3 Camufladas</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="corp-egress-gw-status">Frankfurt Node 01</span>
+              <span class="m-unit">Egress Gateway Activo</span>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn-primary btn-det" onclick="toggleCorporateTLSDpi()" style="flex: 1; font-size: 0.78rem;">🛡️ Alternar Camuflaje Anti-DPI (Puerto 443)</button>
+            <button class="btn-primary btn-det" onclick="switchCorporateEgressJurisdiction()" style="flex: 1; font-size: 0.78rem; background: rgba(56, 189, 248, 0.2); border-color: #38bdf8;">🌐 Cambiar Jurisdicción Egress</button>
+          </div>
+        </section>
+
+        <!-- dDNS Contextual Petnames -->
+        <section class="card glass-card" data-min-level="2">
+          <div class="card-header">
+            <h2>dDNS Contextual (Relatividad de Nombres)</h2>
+            <span class="badge">Libreta Local</span>
+          </div>
+          <p class="section-desc">Asociación mnemotécnica de nombres humanos a DIDs soberanos sin registro central.</p>
+          <form class="alias-form" id="alias-form" onsubmit="registerAlias(event)">
+            <input type="text" id="alias-name" placeholder="ej: servidor.ipv7" required>
+            <input type="text" id="alias-ctx" placeholder="Ámbito raíz (ej: red-patagonia)">
+            <button type="submit" class="btn-primary btn-det">Registrar</button>
+          </form>
+          <div class="alias-list" id="alias-list-container">
+            <div class="alias-pill">
+              <span class="alias-tag">8d605acf.cocacola.ipv7</span>
+              <span class="alias-did">did:ipvn7:ab4041...</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pasaporte Digital UIN & Agentes IA -->
+        <section class="card glass-card" data-min-level="2">
+          <div class="card-header">
+            <h2>Pasaporte Digital UIN (Entidades & Agentes IA)</h2>
+            <span class="badge badge-purple" id="uin-class-badge">Clase 2 · Router Gateway</span>
+          </div>
+          <p class="section-desc">Desacople criptográfico Entidad-Claves. Identificador raíz inmutable (256 bits) con delegación de ámbito para agentes de IA.</p>
+          
+          <div class="passport-root-badge">
+            <span class="coord-label">Root ID UIN (Inmutable 256-bit):</span>
+            <code class="pqc-hex cyan" id="uin-root-id">Cargando...</code>
+          </div>
+
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val purple" id="uin-bindings-count">0</span>
+              <span class="m-unit">Delegaciones Vivas</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="uin-crypto-mode">HYBRID</span>
+              <span class="m-unit">Modo Cripto</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <span class="coord-label">Ámbitos Canónicos Disponibles:</span>
+            <div>
+              <span class="passport-scope-pill">agente_ia</span>
+              <span class="passport-scope-pill">control</span>
+              <span class="passport-scope-pill">telemetría</span>
+              <span class="passport-scope-pill">settlement</span>
+            </div>
+          </div>
+
+          <div class="copilot-result" style="margin-top: 10px; font-size: 0.78rem;" id="uin-issue-log">
+            Pasaporte activo. Listo para emitir credencial delegada de agente IA.
+          </div>
+
+          <div class="pqc-action-row" style="margin-top: 10px;">
+            <button class="btn-primary btn-det" onclick="triggerIssueBinding()" style="width: 100%; font-size: 0.8rem;">📜 Emitir Delegación Agente IA (UIN Binding)</button>
+          </div>
+        </section>
+
+        <!-- Global Memory Arbiter (Defensa Anti-OOM DoS) -->
+        <section class="card glass-card" data-min-level="3">
+          <div class="card-header">
+            <h2>Global Memory Arbiter (Anti-OOM DoS)</h2>
+            <span class="badge badge-green" id="arbiter-status-badge">PROTEGIDO · 64 MB</span>
+          </div>
+          <p class="section-desc">Asignación presupuestaria estricta por subsistemas. Descarte preventivo determinista antes de saturar memoria del host.</p>
+          
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="m-val cyan" id="arbiter-used-display">0 KB</span>
+              <span class="m-unit">RAM Asignada</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val red" id="arbiter-dropped-display">0</span>
+              <span class="m-unit">Descartes Preventivos DoS</span>
+            </div>
+          </div>
+
+          <div class="quota-bar-wrapper">
+            <div class="quota-item">
+              <div class="quota-header">
+                <span>Anti-Replay Window (20%)</span>
+                <span id="q-replay-pct">0% (13.1 MB max)</span>
+              </div>
+              <div class="quota-progress">
+                <div class="quota-fill fill-replay" id="q-replay-bar" style="width: 2%;"></div>
+              </div>
+            </div>
+
+            <div class="quota-item">
+              <div class="quota-header">
+                <span>QoS & Buffers (30%)</span>
+                <span id="q-qos-pct">0% (19.6 MB max)</span>
+              </div>
+              <div class="quota-progress">
+                <div class="quota-fill fill-qos" id="q-qos-bar" style="width: 1%;"></div>
+              </div>
+            </div>
+
+            <div class="quota-item">
+              <div class="quota-header">
+                <span>Web-of-Trust (20%)</span>
+                <span id="q-trust-pct">0% (13.1 MB max)</span>
+              </div>
+              <div class="quota-progress">
+                <div class="quota-fill fill-trust" id="q-trust-bar" style="width: 1%;"></div>
+              </div>
+            </div>
+
+            <div class="quota-item">
+              <div class="quota-header">
+                <span>UIN Bindings Cache (20%)</span>
+                <span id="q-bindings-pct">0% (13.1 MB max)</span>
+              </div>
+              <div class="quota-progress">
+                <div class="quota-fill fill-bindings" id="q-bindings-bar" style="width: 3%;"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Microservicios Bajo Demanda -->
+        <section class="card glass-card" data-min-level="2">
+          <div class="card-header">
+            <h2>Servicios Bajo Demanda (Zero Footprint)</h2>
+            <span class="badge badge-blue">Lazy Loading</span>
+          </div>
+          <p class="section-desc">Instanciación en RAM solo al solicitarlos. Autodestrucción tras inactividad.</p>
+          <div class="services-list" id="services-container">
+            <div class="service-row" data-svc="chat_e2ee">
+              <div class="svc-info">
+                <span class="svc-name">Chat E2EE Soberano</span>
+                <span class="svc-footprint" id="fp-chat">0 Bytes RAM (Dormido)</span>
+              </div>
+              <button class="btn-toggle btn-det" onclick="toggleService('chat_e2ee')">Activar</button>
+            </div>
+            <div class="service-row" data-svc="remote_desktop">
+              <div class="svc-info">
+                <span class="svc-name">Escritorio Remoto P2P</span>
+                <span class="svc-footprint" id="fp-remote">0 Bytes RAM (Dormido)</span>
+              </div>
+              <button class="btn-toggle btn-det" onclick="toggleService('remote_desktop')">Activar</button>
+            </div>
+            <div class="service-row" data-svc="dag_store">
+              <div class="svc-info">
+                <span class="svc-name">Almacén DAG Store (DTN)</span>
+                <span class="svc-footprint" id="fp-dag">0 Bytes RAM (Dormido)</span>
+              </div>
+              <button class="btn-toggle btn-det" onclick="toggleService('dag_store')">Activar</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Persistencia DAG & DTN -->
+        <section class="card glass-card" data-min-level="3">
+          <div class="card-header">
+            <h2>Persistencia DAG & DTN (Dimensión 4)</h2>
+            <span class="badge badge-blue">Store-and-Forward</span>
+          </div>
+          <p class="section-desc">Bloques inmutables direccionados por contenido (CID) con firmas Ed25519.</p>
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="m-val cyan" id="dag-blocks">0</span>
+              <span class="m-unit">Bloques CID</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val amber" id="dag-queued">0</span>
+              <span class="m-unit">Encolados DTN</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="dag-delivered">0</span>
+              <span class="m-unit">Entregados</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Catálogo Semántico & Pull Discovery -->
+        <section class="card glass-card" data-min-level="4">
+          <div class="card-header">
+            <h2>Pull Discovery Semántico (Sec. 1, 7 & 26)</h2>
+            <span class="badge badge-purple">Zero Broadcast</span>
+          </div>
+          <p class="section-desc">Resolución declarativa de capacidades por intención sin tormentas broadcast ruidosas.</p>
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val cyan" id="semantic-profiles-count">1</span>
+              <span class="m-unit">Perfiles Indexados</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="semantic-tags-count">3</span>
+              <span class="m-unit">Tags Activos</span>
+            </div>
+          </div>
+          <form class="alias-form" onsubmit="querySemanticTags(event)" style="margin-top: 10px;">
+            <input type="text" id="semantic-query-input" placeholder="Tags req. ej: geo/chile,domain/compute" />
+            <button type="submit" class="btn-primary btn-det">Buscar</button>
+          </form>
+          <div class="semantic-results" id="semantic-results-box">
+            <div class="semantic-card-mini">
+              <span class="semantic-tag-badge">geo/chile</span>
+              <span class="semantic-tag-badge">domain/compute</span>
+              <span class="semantic-tag-badge">service/storage</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 3: ESCUDO CRIPTO & ZTNA (Nivel 3 & 4)                         -->
+    <!-- ==================================================================== -->
+    <div class="tab-pane" id="pane-tab-security">
+      <section class="secondary-grid">
+        <!-- Escudo Post-Cuántico -->
+        <section class="card glass-card" data-min-level="2">
+          <div class="card-header">
+            <h2>Escudo Post-Cuántico (ML-DSA & ML-KEM)</h2>
+            <span class="badge badge-green" id="pqc-status-badge">NIST Level 3 · ACTIVO</span>
+          </div>
+          <p class="section-desc">Firma dual inescindible (Ed25519 + ML-DSA-65) y encapsulación reticular (X25519 + ML-KEM-768).</p>
+          <div class="pqc-keys-grid">
+            <div class="pqc-key-item">
+              <span class="pqc-label">Clave Clásica Ed25519:</span>
+              <code class="pqc-hex" id="pqc-ed25519-hex">Cargando...</code>
+            </div>
+            <div class="pqc-key-item">
+              <span class="pqc-label">Clave Reticular ML-DSA-65 (FIPS 204):</span>
+              <code class="pqc-hex purple" id="pqc-mldsa-hex">Cargando...</code>
+            </div>
+            <div class="pqc-key-item">
+              <span class="pqc-label">Intercambio X25519:</span>
+              <code class="pqc-hex" id="pqc-x25519-hex">Cargando...</code>
+            </div>
+            <div class="pqc-key-item">
+              <span class="pqc-label">Encapsulación ML-KEM-768 (FIPS 203):</span>
+              <code class="pqc-hex cyan" id="pqc-mlkem-hex">Cargando...</code>
+            </div>
+          </div>
+          <div class="pqc-action-row">
+            <button class="btn-primary btn-det" onclick="triggerPQCBenchmark()">⚡ Ejecutar Firma Dual & Benchmark</button>
+            <span class="pqc-benchmark-tag" id="pqc-benchmark-result">Listo para prueba de firma dual cuántica</span>
+          </div>
+        </section>
+
+        <!-- Enrutador Cebolla Sphinx -->
+        <section class="card glass-card" data-min-level="3">
+          <div class="card-header">
+            <h2>Enrutador Cebolla Sphinx (3 Saltos)</h2>
+            <span class="badge badge-purple">MTU 1280B Determinista</span>
+          </div>
+          <p class="section-desc">Anonimato de grado soberano. Trama constante inmutable, desprendimiento de capas y anti-replay.</p>
+          <div class="sphinx-circuit-visual">
+            <div class="sphinx-hop-box" id="hop-guard">
+              <span class="hop-role">GUARD</span>
+              <span class="hop-sub" id="hop-guard-did">did:ipvn7:guard</span>
+            </div>
+            <span class="sphinx-arrow">➔</span>
+            <div class="sphinx-hop-box" id="hop-middle">
+              <span class="hop-role">MIDDLE</span>
+              <span class="hop-sub" id="hop-middle-did">did:ipvn7:middle</span>
+            </div>
+            <span class="sphinx-arrow">➔</span>
+            <div class="sphinx-hop-box" id="hop-exit">
+              <span class="hop-role">EXIT</span>
+              <span class="hop-sub" id="hop-exit-did">did:ipvn7:exit</span>
+            </div>
+          </div>
+          <div class="sphinx-peel-status" id="sphinx-peel-log">
+            Circuito listo: 1280B Deterministic Wire con protección anti-repetición O(1).
+          </div>
+          <div class="pqc-action-row">
+            <button class="btn-primary btn-det" onclick="triggerOnionPeel()">🧅 Probar Peeling Cebolla (3 Saltos)</button>
+          </div>
+        </section>
+
+        <!-- Cortafuegos ZTNA -->
+        <section class="card glass-card" data-min-level="2">
+          <div class="card-header">
+            <h2>Cortafuegos ZTNA (Dimensión 1)</h2>
+            <span class="badge badge-green" id="ztna-mode-badge">Default-Deny</span>
+          </div>
+          <p class="section-desc">Micro-segmentación por identidad criptográfica. Cero confianza implícita.</p>
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val cyan" id="ztna-eval">0</span>
+              <span class="m-unit">Evaluados</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="ztna-accept">0</span>
+              <span class="m-unit">Aceptados</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val red" id="ztna-drop-dd">0</span>
+              <span class="m-unit">Descartes Default-Deny</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val amber" id="ztna-drop-acl">0</span>
+              <span class="m-unit">Descartes ACL</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Anti-Replay Robusto (Multi-Sesión) -->
+        <section class="card glass-card" data-min-level="3">
+          <div class="card-header">
+            <h2>Anti-Replay Robusto (Multi-Sesión)</h2>
+            <span class="badge badge-purple">1024-bit Sliding Bitmap</span>
+          </div>
+          <p class="section-desc">Defensa estricta contra 4 vectores: duplicado inmediato, replay tardío, cross-session spoofing y desorden temporal.</p>
+          
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val green" id="ar-vector-1">VALID</span>
+              <span class="m-unit">Trama Legítima</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val red" id="ar-vector-2">REJECTED</span>
+              <span class="m-unit">Replay Inmediato</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val amber" id="ar-vector-3">REJECTED</span>
+              <span class="m-unit">Cross-Session</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val purple" id="ar-vector-4">ACCEPTED</span>
+              <span class="m-unit">Jitter Reorder</span>
+            </div>
+          </div>
+
+          <div class="copilot-result" style="margin-top: 10px; font-size: 0.78rem;" id="ar-test-log">
+            Filtro anti-repetición O(1) activo con aislamiento determinista por SessionID.
+          </div>
+
+          <div class="pqc-action-row" style="margin-top: 10px;">
+            <button class="btn-primary btn-det" onclick="triggerAntiReplayTest()" style="width: 100%; font-size: 0.8rem;">🛡️ Probar 4 Vectores Anti-Replay</button>
+          </div>
+        </section>
+
+        <!-- Red Silenciosa -->
+        <section class="card glass-card" data-min-level="4">
+          <div class="card-header">
+            <h2>Red Silenciosa (IPv7-HRS)</h2>
+            <span class="badge badge-purple" id="silent-status-badge">Cero Broadcast O(1)</span>
+          </div>
+          <p class="section-desc">Cero ruido de difusión. Unicast autenticado directo con semáforo hot-path DoS (&lt;15 ns).</p>
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val red" id="silent-noise-dropped">0</span>
+              <span class="m-unit">Ruido Descartado</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="silent-calls-recv">0</span>
+              <span class="m-unit">Llamadas Recibidas</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val cyan" id="silent-resp-sent">0</span>
+              <span class="m-unit">Respuestas Enviadas</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val amber" id="silent-peers-count">1</span>
+              <span class="m-unit">Pares Unicast</span>
+            </div>
+          </div>
+          <div class="copilot-result" style="margin-top: 10px; font-size: 0.8rem;" id="silent-call-log">
+            Estado: Malla silenciosa en reposo estricto. Cero broadcast emitido.
+          </div>
+          <button class="btn-primary btn-det" onclick="triggerSilentCall()" style="width: 100%; margin-top: 10px; font-size: 0.8rem;">📡 Probar Llamada Silenciosa Autenticada</button>
+        </section>
+      </section>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA: VPN FRICCIÓN CERO PARA MULTINACIONALES                      -->
+    <!-- ==================================================================== -->
+    <div class="tab-pane" id="pane-tab-vpn">
+      <!-- Banner Hero VPN -->
+      <section class="card glass-card vpn-hero-banner" style="margin-bottom: 20px;">
+        <div class="vpn-hero-info">
+          <div class="vpn-hero-status-row">
+            <span class="vpn-status-live-indicator connected" id="tab-vpn-status-indicator">
+              <span class="status-dot pulsing" style="background: #10b981;"></span>
+              PROTEGIDO · TÚNEL CORPORATIVO ACTIVO
+            </span>
+            <span class="vpn-chip-badge" id="tab-vpn-active-mode-badge">ZERO-ADMIN PROXY</span>
+          </div>
+          <h2 class="vpn-hero-title">VPN Soberana Fricción Cero para Multinacionales</h2>
+          <p class="vpn-hero-sub">Túnel cuántico invisible sobre puerto 443 con disfraz RFC 8446 TLS 1.3. Conexión sin privilegios de administrador mediante SOCKS5 local (:10807) y HTTP CONNECT (:10808) para eludir cortafuegos Palo Alto, Fortinet y Zscaler.</p>
+        </div>
+
+        <div class="vpn-power-control">
+          <button class="vpn-power-btn active" id="tab-vpn-power-btn" onclick="toggleCorporateVPNConnection()" title="Conectar / Desconectar VPN">
+            <div class="vpn-power-ring"></div>
+            ⏻
+          </button>
+          <span style="font-size: 0.72rem; color: #94a3b8; font-family: var(--font-mono);" id="tab-vpn-power-lbl">CONECTADO</span>
+        </div>
+      </section>
+
+      <!-- KPIs Rápidos -->
+      <div class="vpn-kpi-row" style="margin-bottom: 20px;">
+        <div class="vpn-kpi-card glass-card">
+          <span class="vpn-kpi-label">Pasarela de Salida</span>
+          <span class="vpn-kpi-value cyan" id="tab-vpn-kpi-egress">🇩🇪 Frankfurt Hub</span>
+        </div>
+        <div class="vpn-kpi-card glass-card">
+          <span class="vpn-kpi-label">Latencia RTT</span>
+          <span class="vpn-kpi-value green" id="tab-vpn-kpi-rtt">18.4 ms</span>
+        </div>
+        <div class="vpn-kpi-card glass-card">
+          <span class="vpn-kpi-label">Tramas TLS Disfrazadas</span>
+          <span class="vpn-kpi-value purple" id="tab-vpn-kpi-tls">114,240</span>
+        </div>
+        <div class="vpn-kpi-card glass-card">
+          <span class="vpn-kpi-label">Fugas DNS / WebRTC</span>
+          <span class="vpn-kpi-value green" id="tab-vpn-kpi-leaks">0% (BLINDADO)</span>
+        </div>
+      </div>
+
+      <!-- Split Grid Principal -->
+      <div class="vpn-main-split">
+        <!-- Columna Izquierda: Modos y Anti-DPI -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Selector de Modo Operativo -->
+          <section class="card glass-card">
+            <div class="card-header">
+              <h2>Modo Operativo Zero-Admin</h2>
+              <span class="badge badge-green" id="tab-vpn-mode-badge-card">SIN ELEVACIÓN DE PRIVILEGIOS</span>
+            </div>
+            <p class="section-desc">Detecta de manera inteligente las restricciones del sistema operativo corporativo.</p>
+
+            <div class="vpn-mode-selector-grid">
+              <div class="vpn-mode-card selected" id="tab-mode-card-userspace" onclick="setCorporateVPNMode('USERSPACE_PROXY')">
+                <div class="vpn-mode-header">
+                  <span class="vpn-mode-title">⚡ Userspace Proxy</span>
+                  <span style="color:#00f0ff; font-size: 0.8rem;">● Recomendado</span>
+                </div>
+                <p class="vpn-mode-desc">SOCKS5 en <code>127.0.0.1:10807</code> y HTTP en <code>127.0.0.1:10808</code>. Cero instalación de controladores ni permisos de root.</p>
+              </div>
+
+              <div class="vpn-mode-card" id="tab-mode-card-kernel" onclick="setCorporateVPNMode('KERNEL_TUN')">
+                <div class="vpn-mode-header">
+                  <span class="vpn-mode-title">⚙️ Kernel TUN Nativo</span>
+                  <span style="color:#94a3b8; font-size: 0.8rem;">Root / Admin</span>
+                </div>
+                <p class="vpn-mode-desc">Adaptador virtual L3 de kernel (<code>ipv70</code>). Captura el 100% del tráfico IP del sistema operativo.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Camuflaje Anti-DPI TLS 1.3 -->
+          <section class="card glass-card">
+            <div class="card-header">
+              <h2>Disfraz Anti-DPI (RFC 8446 / Puerto 443)</h2>
+              <button class="btn-scale active" id="tab-btn-toggle-dpi" onclick="toggleCorporateAntiDPI()">Disfraz Activo ✓</button>
+            </div>
+            <p class="section-desc">Encapsula los paquetes deterministas de 1280B en registros TLS 1.3 <code>ApplicationData</code> legítimos para eludir inspección profunda (DPI).</p>
+
+            <div class="vpn-dpi-box">
+              <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: #94a3b8;">
+                <span>Estructura de Trama en Cable:</span>
+                <span style="font-family: var(--font-mono); color: #00f0ff;">MTU 1280B + 5B TLS Header</span>
+              </div>
+              <div class="vpn-hex-stream" id="tab-vpn-hex-display">
+                0x17 0x03 0x03 0x05 0x00 [CHACHA20-POLY1305 ENCRYPTED FRAME ... 1280 BYTES DETERMINISTA]
+              </div>
+              <div class="vpn-firewall-bypass-grid">
+                <div class="vpn-bypass-item"><span class="check">✓</span> Palo Alto PAN-OS App-ID</div>
+                <div class="vpn-bypass-item"><span class="check">✓</span> Fortinet FortiOS DPI</div>
+                <div class="vpn-bypass-item"><span class="check">✓</span> Zscaler Cloud Sandbox</div>
+                <div class="vpn-bypass-item"><span class="check">✓</span> Cisco Firepower Next-Gen</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Columna Derecha: Salidas y ZTNA -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Pasarelas de Salida Multijurisdiccionales -->
+          <section class="card glass-card">
+            <div class="card-header">
+              <h2>Pasarelas de Salida Corporativas (Egress)</h2>
+              <span class="badge badge-blue" id="tab-egress-count-badge">5 Jurisdicciones Disponibles</span>
+            </div>
+            <p class="section-desc">Selecciona la jurisdicción legal y geográfica por la cual tu tráfico sale hacia Internet público.</p>
+
+            <div class="vpn-egress-list">
+              <div class="vpn-egress-card active" id="tab-egress-fra" onclick="selectCorporateVPNEgress('fra', 'Frankfurt Hub 01', '18.4 ms', '🇩🇪')">
+                <div class="vpn-egress-info">
+                  <span class="vpn-flag">🇩🇪</span>
+                  <div>
+                    <div class="vpn-egress-name">Frankfurt, Alemania</div>
+                    <div class="vpn-egress-fqdn">egress-fra-01.corp.ipvn7.net</div>
+                  </div>
+                </div>
+                <div class="vpn-egress-stats">
+                  <span class="vpn-egress-rtt">18.4 ms</span>
+                  <span class="vpn-chip-badge" style="color:#10b981; border-color:#10b981;">ACTIVO</span>
+                </div>
+              </div>
+
+              <div class="vpn-egress-card" id="tab-egress-zrh" onclick="selectCorporateVPNEgress('zrh', 'Zurich Node 02', '24.1 ms', '🇨🇭')">
+                <div class="vpn-egress-info">
+                  <span class="vpn-flag">🇨🇭</span>
+                  <div>
+                    <div class="vpn-egress-name">Zúrich, Suiza (Secreto Bancario)</div>
+                    <div class="vpn-egress-fqdn">egress-zrh-01.corp.ipvn7.net</div>
+                  </div>
+                </div>
+                <div class="vpn-egress-stats">
+                  <span class="vpn-egress-rtt">24.1 ms</span>
+                </div>
+              </div>
+
+              <div class="vpn-egress-card" id="tab-egress-tyo" onclick="selectCorporateVPNEgress('tyo', 'Tokyo Hub 03', '132.8 ms', '🇯🇵')">
+                <div class="vpn-egress-info">
+                  <span class="vpn-flag">🇯🇵</span>
+                  <div>
+                    <div class="vpn-egress-name">Tokio, Japón (APAC Core)</div>
+                    <div class="vpn-egress-fqdn">egress-tyo-01.corp.ipvn7.net</div>
+                  </div>
+                </div>
+                <div class="vpn-egress-stats">
+                  <span class="vpn-egress-rtt">132.8 ms</span>
+                </div>
+              </div>
+
+              <div class="vpn-egress-card" id="tab-egress-nyc" onclick="selectCorporateVPNEgress('nyc', 'New York Gateway 04', '78.2 ms', '🇺🇸')">
+                <div class="vpn-egress-info">
+                  <span class="vpn-flag">🇺🇸</span>
+                  <div>
+                    <div class="vpn-egress-name">Nueva York, EE.UU. (Wall St)</div>
+                    <div class="vpn-egress-fqdn">egress-nyc-01.corp.ipvn7.net</div>
+                  </div>
+                </div>
+                <div class="vpn-egress-stats">
+                  <span class="vpn-egress-rtt">78.2 ms</span>
+                </div>
+              </div>
+
+              <div class="vpn-egress-card" id="tab-egress-sin" onclick="selectCorporateVPNEgress('sin', 'Singapore Hub 05', '155.0 ms', '🇸🇬')">
+                <div class="vpn-egress-info">
+                  <span class="vpn-flag">🇸🇬</span>
+                  <div>
+                    <div class="vpn-egress-name">Singapur (Sureste Asiático)</div>
+                    <div class="vpn-egress-fqdn">egress-sin-01.corp.ipvn7.net</div>
+                  </div>
+                </div>
+                <div class="vpn-egress-stats">
+                  <span class="vpn-egress-rtt">155.0 ms</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Micro-segmentación ZTNA & Resiliencia Post-Apagón -->
+          <section class="card glass-card">
+            <div class="card-header">
+              <h2>Verificador Zero Trust ZTNA (Default-Deny)</h2>
+              <span class="badge badge-purple">AISLAMIENTO LATERAL</span>
+            </div>
+            <p class="section-desc">Evalúa si un DID corporativo o recurso intranet tiene autorización estricta para comunicarse.</p>
+
+            <div class="vpn-ztna-tester">
+              <div class="vpn-ztna-input-row">
+                <input type="text" id="tab-ztna-query-input" placeholder="ej: gitlab.corp.internal o did:ipvn7:e821..." value="gitlab.corp.internal">
+                <button class="btn-primary btn-det" onclick="testZTNAEnterpriseAccess('tab')">Evaluar ZTNA</button>
+              </div>
+              <div class="vpn-ztna-result-box" id="tab-ztna-result-display">
+                <span style="color:#10b981;">✓ AUTORIZADO (ZTNA Strict):</span> Recurso corporativo verificado con firma Ed25519 en lista blanca.
+              </div>
+            </div>
+
+            <!-- Recuperación Post-Apagón (EBRA) -->
+            <div class="vpn-blackout-box">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; font-size: 0.85rem; color: #fff;">⚡ Recuperación en Cascada Post-Apagón</span>
+                <span class="vpn-phase-pill" id="tab-blackout-phase-pill">RED CONVERGIDA (P2P PURA)</span>
+              </div>
+              <div class="vpn-blackout-progress-row">
+                <span style="font-size: 0.74rem; color: var(--text-muted);">Jitter Descorrelacionado:</span>
+                <span style="font-family: var(--font-mono); font-size: 0.78rem; color: #c084fc;" id="tab-blackout-jitter-val">14.8s ± 4.2s (Zero Estampida)</span>
+              </div>
+              <button class="btn-primary btn-det" onclick="simulateBlackoutRecoveryCascade()" style="width: 100%; font-size: 0.78rem; padding: 6px 12px;">Simular Apagón & Recuperación en 5 Fases</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- PESTAÑA 4: GRAFO KÙZUDB & IA (Nivel 7)                                -->
+    <!-- ==================================================================== -->
+    <div class="tab-pane" id="pane-tab-axiomatic">
+      <!-- Grafo Relacional KùzuDB & Pipeline Axiomático PFO -->
+      <section class="card glass-card full-width-card" data-min-level="5">
+        <div class="card-header">
+          <h2>Motor de Grafos KùzuDB & Pipeline Axiomático PFO (Fase 1)</h2>
+          <span class="badge badge-blue" id="kuzu-status-badge">openCypher & Detección de Contradicciones</span>
+        </div>
+        <p class="section-desc">Fuente de verdad viva en grafo de propiedades: Principios Axiomáticos ➔ Funciones Operativas ➔ Observaciones Empíricas.</p>
+        <div class="kuzu-console-grid">
+          <div class="kuzu-subpanel">
+            <h3>Consola openCypher</h3>
+            <div class="cypher-input-row">
+              <input type="text" id="cypher-input" value="MATCH (a:AxiomPrinciple) RETURN a" class="input-dark">
+              <button class="btn-primary btn-det" onclick="executeCypherQuery()">Consultar Grafo</button>
+            </div>
+            <pre class="console-output" id="cypher-output">Esperando consulta...</pre>
+          </div>
+          <div class="kuzu-subpanel">
+            <h3>Auditor Deductivo Anti-Contradicciones</h3>
+            <div class="cypher-input-row">
+              <input type="text" id="audit-directive-input" placeholder="ej: Guardar IP real o modificar core/" class="input-dark">
+              <button class="btn-primary btn-det" onclick="executeAxiomAudit()">Auditar Directiva</button>
+            </div>
+            <div class="audit-verdict-box" id="audit-verdict-display">
+              Ingrese una directiva para verificar coherencia contra Zero-PII, Core Freeze y Flujo Sostenible.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="secondary-grid">
+        <!-- Copiloto de IA & Auto-Curación -->
+        <section class="card glass-card copilot-panel" data-min-level="3">
+          <div class="card-header">
+            <h2>Copiloto de IA & Auto-Curación Autónoma (Dimensión 11)</h2>
+            <span class="badge badge-purple" id="copilot-status-badge">DeepSeek-V3 · Auto-Healing ACTIVO</span>
+          </div>
+          <p class="section-desc">Observabilidad de telemetría en tiempo real, detección de vectores de anomalías y auto-reparación dinámica.</p>
+          <div class="copilot-content">
+            <div class="copilot-action-row">
+              <div class="metrics-row" style="margin-bottom:0;">
+                <div class="metric-box">
+                  <span class="m-val purple" id="copilot-diagnoses-count">0</span>
+                  <span class="m-unit">Diagnósticos</span>
+                </div>
+                <div class="metric-box">
+                  <span class="m-val green" id="copilot-actions-count">0</span>
+                  <span class="m-unit">Acciones Aplicadas</span>
+                </div>
+              </div>
+              <button class="btn-primary btn-det" id="btn-trigger-copilot" onclick="triggerCopilotDiagnosis()">⚡ Diagnosticar Malla con IA</button>
+            </div>
+            <div class="copilot-result" id="copilot-log-display">
+              Estado: Malla operando dentro de los parámetros estables. Listo para escaneo autónomo.
+            </div>
+          </div>
+        </section>
+
+        <!-- Diagnóstico Reflexivo STUN NAT -->
+        <section class="card glass-card" data-min-level="4">
+          <div class="card-header">
+            <h2>Perforación de NAT / STUN (RFC 5389)</h2>
+            <span class="badge badge-blue" id="stun-status-badge">Hole Punching Listo</span>
+          </div>
+          <p class="section-desc">Descubrimiento autónomo de IP/puerto reflexivo público para traversal de NAT residencial y CGNAT.</p>
+          <div class="metrics-row" style="margin-bottom: 12px;">
+            <div class="metric-box" style="flex: 1.5;">
+              <span class="m-val cyan" id="stun-public-endpoint" style="font-size: 1.05rem;">Sin sondear</span>
+              <span class="m-unit">Endpoint Reflexivo Público</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="stun-latency">-- ms</span>
+              <span class="m-unit">Latencia Reflector</span>
+            </div>
+          </div>
+          <div class="copilot-result" style="font-size: 0.8rem; margin-bottom: 10px;" id="stun-type-display">
+            Tipo de Mapeo: Presione 'Sondear STUN' para diagnóstico RFC 5389.
+          </div>
+          <button class="btn-primary btn-det" onclick="triggerSTUNProbe()" style="width: 100%;">🔍 Sondear STUN RFC 5389</button>
+        </section>
+
+        <!-- Guardián de Resiliencia ASA Nexus -->
+        <section class="card glass-card" data-min-level="5">
+          <div class="card-header">
+            <h2>Guardián de Resiliencia (ASA Nexus)</h2>
+            <span class="badge badge-green" id="guardian-circuit-badge">CIRCUIT CLOSED</span>
+          </div>
+          <p class="section-desc">Backoff exponencial con Jitter completo, cortocircuito anti-cascada y protección de pánicos.</p>
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val cyan" id="guardian-heap">-- MB</span>
+              <span class="m-unit">Heap Alloc RAM</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val purple" id="guardian-routines">--</span>
+              <span class="m-unit">Goroutines</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="guardian-panics-saved">0</span>
+              <span class="m-unit">Pánicos Interceptados</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val amber" id="guardian-recoveries">0</span>
+              <span class="m-unit">Recuperaciones</span>
+            </div>
+          </div>
+          <div class="copilot-result" style="margin-top: 10px; font-size: 0.8rem;" id="guardian-status-msg">
+            Estado: Sistema Operativo de Malla Soberana Óptimo
+          </div>
+        </section>
+
+        <!-- Merkle Audit Log Inalterable -->
+        <section class="card glass-card" data-min-level="5">
+          <div class="card-header">
+            <h2>Merkle Audit Log (Sec. 22)</h2>
+            <span class="badge badge-green" id="audit-status-badge">Verificado ✓</span>
+          </div>
+          <p class="section-desc">Registro criptográfico inalterable de auditoría con encadenamiento secuencial SHA-256.</p>
+          <div class="metric-grid-2">
+            <div class="metric-box">
+              <span class="m-val purple" id="audit-entries-count">0</span>
+              <span class="m-unit">Eventos Firmados</span>
+            </div>
+            <div class="metric-box">
+              <span class="m-val green" id="audit-integrity">100%</span>
+              <span class="m-unit">Integridad Cadena</span>
+            </div>
+          </div>
+          <div class="audit-log-stream" id="audit-log-stream">
+            <div class="audit-item">Iniciando verificación continua del libro mayor criptográfico...</div>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <!-- ==================================================================== -->
+    <!-- NIVEL 7: ESTACIÓN DE INGENIERÍA & ARQUITECTO SOBERANO (CONTROL TOTAL)-->
+    <!-- ==================================================================== -->
+    <section class="engineer-workstation-panel" id="engineer-workstation-panel" data-min-level="7">
+      <div class="engineer-hud-header">
+        <div class="engineer-hud-title">
+          <span style="font-size: 1.6rem;">⚡</span>
+          <div>
+            <h3>ESTACIÓN DE INGENIERÍA DE SISTEMAS · ARQUITECTO SOBERANO</h3>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Control Quirúrgico Desacoplado: Kernel eBPF/XDP · Consultas openCypher KùzuDB · Cripto PQC · Kleinberg Override</span>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span class="engineer-pill-tag">WSL2 NATIVE HOOKS</span>
+          <span class="engineer-pill-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.4);">CORE FREEZE RESPETADO</span>
+        </div>
+      </div>
+
+      <!-- Fila 1: Consola openCypher Nativa & Control de Kernel eBPF/XDP -->
+      <div class="eng-grid-2">
+        <!-- Consola openCypher Nativa KùzuDB -->
+        <div class="eng-card eng-red-border">
+          <div class="eng-card-header">
+            <h4><span>🔍</span> Consola openCypher Nativa (KùzuDB Engine)</h4>
+            <span class="badge" style="background: rgba(0, 240, 255, 0.15); color: #00f0ff; border-color: rgba(0, 240, 255, 0.3);">.kuzu_index/ipv7.db</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Ejecución directa de consultas analíticas sobre el grafo vivo de identidades, aristas XOR_LINK y gobernanza FSM.</p>
+          
+          <div class="cypher-chips-row">
+            <span class="cypher-chip" onclick="setCypherSample('MATCH (p:Peer) RETURN p.did, p.ml_dsa, p.anycast')">Peers & PQC</span>
+            <span class="cypher-chip" onclick="setCypherSample('MATCH ()-[r:XOR_LINK]->() RETURN r.degree, r.latency_ms, r.rf_band')">Aristas XOR & EWMA</span>
+            <span class="cypher-chip" onclick="setCypherSample('MATCH ()-[g:GOVERNS]->() RETURN g.action, g.signature')">Gobernanza FSM</span>
+            <span class="cypher-chip" onclick="setCypherSample('MATCH (p:Peer) WHERE p.ml_dsa IS NOT NULL RETURN count(p) as pqc_peers')">Contador PQC</span>
+          </div>
+
+          <div class="cypher-terminal-input">
+            <input type="text" id="eng-cypher-input" value="MATCH (p:Peer) RETURN p.did, p.ml_dsa, p.anycast" placeholder="MATCH (p:Peer)...">
+            <button class="btn-primary btn-det" onclick="executeEngineerCypher()" style="background: #ef4444; border-color: #ef4444;">Ejecutar Cypher</button>
+          </div>
+
+          <div id="cypher-eng-results-container" style="min-height: 140px; background: #060912; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); padding: 8px;">
+            <table class="cypher-results-table" id="cypher-eng-table">
+              <thead>
+                <tr>
+                  <th>p.did</th>
+                  <th>p.ml_dsa</th>
+                  <th>p.anycast</th>
+                </tr>
+              </thead>
+              <tbody id="cypher-eng-tbody">
+                <tr>
+                  <td>did:ipv7:e821ef1a17f84e318f...</td>
+                  <td>ml-dsa-65:4a8f9c...</td>
+                  <td>false</td>
+                </tr>
+                <tr>
+                  <td>did:ipv7:09ab21cd77ef8811...</td>
+                  <td>ml-dsa-65:b2c3d4...</td>
+                  <td>true (Egress Gateway)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Control de Kernel eBPF / XDP & Fast-Path -->
+        <div class="eng-card eng-red-border">
+          <div class="eng-card-header">
+            <h4><span>🛡️</span> Pipeline eBPF / XDP en Kernel Linux</h4>
+            <span class="badge badge-green" id="xdp-kernel-badge">XDP_DROP FAST-PATH ACTIVO</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Filtrado de paquetes en la tarjeta de red antes de ingresar a la pila de red del sistema operativo.</p>
+          
+          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08);">
+            <div>
+              <span style="font-size: 0.82rem; font-weight: 600; color: #fff; display: block;">Modo de Enlace XDP</span>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Nativo (Driver) para 10Gbps · Genérico (SKB) para emulación WSL2</span>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn-orbital-action active" id="btn-xdp-native" onclick="setXDPMode('native')">Nativo</button>
+              <button class="btn-orbital-action" id="btn-xdp-skb" onclick="setXDPMode('skb')">SKB Genérico</button>
+            </div>
+          </div>
+
+          <div class="perf-stat-row" style="margin-top: 6px;">
+            <div class="perf-stat-card">
+              <span class="perf-stat-num" id="xdp-pkts-cnt">14,921,800</span>
+              <span class="perf-stat-lbl">Paquetes Filtrados en Kernel</span>
+            </div>
+            <div class="perf-stat-card red">
+              <span class="perf-stat-num red" id="xdp-drops-cnt">0</span>
+              <span class="perf-stat-lbl">Descartes Anómalos (XDP_DROP)</span>
+            </div>
+            <div class="perf-stat-card">
+              <span class="perf-stat-num" id="xdp-cpu-cost">&lt; 0.4%</span>
+              <span class="perf-stat-lbl">Sobrecarga de CPU Kernel</span>
+            </div>
+          </div>
+
+          <div style="font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono); background: #060912; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.05);">
+            Mapa eBPF: rulesMap [HASH, key=32B_DID, val=Rule] · bpf_map_lookup_elem en O(1)
+          </div>
+        </div>
+      </div>
+
+      <!-- Fila 2: Manipulador Kleinberg 12 Anillos & Criptografía Post-Cuántica (PQC) -->
+      <div class="eng-grid-2">
+        <!-- Manipulador de Matriz de Mundo Pequeño (12 Anillos) -->
+        <div class="eng-card">
+          <div class="eng-card-header">
+            <h4><span>🪐</span> Matriz de Mundo Pequeño de Kleinberg (12×10)</h4>
+            <span class="badge" style="background: rgba(168, 85, 247, 0.15); color: #c084fc; border-color: rgba(168, 85, 247, 0.3);">Cota Estricta: 120 Pares</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Inspección celda por celda de los 12 anillos logarítmicos concéntricos con métrica XOR y HopLimit=12.</p>
+          
+          <div style="max-height: 200px; overflow-y: auto; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px;">
+            <table class="kleinberg-rings-table">
+              <thead>
+                <tr>
+                  <th>Anillo</th>
+                  <th>Distancia XOR</th>
+                  <th>Capacidad</th>
+                  <th>EWMA RTT</th>
+                  <th>Acción Quirúrgica</th>
+                </tr>
+              </thead>
+              <tbody id="kleinberg-rings-tbody">
+                <tr>
+                  <td><span class="badge-ring-degree">Grado 0</span></td>
+                  <td>00000000... (Inmediatos)</td>
+                  <td>2 / 10</td>
+                  <td style="color: #10b981;">0.84 ms</td>
+                  <td><button class="btn-orbital-action" style="padding: 2px 6px; font-size: 0.7rem;" onclick="triggerPinPeer(0)">Fijar Par</button></td>
+                </tr>
+                <tr>
+                  <td><span class="badge-ring-degree">Grado 1</span></td>
+                  <td>00000001...</td>
+                  <td>1 / 10</td>
+                  <td style="color: #10b981;">1.10 ms</td>
+                  <td><button class="btn-orbital-action" style="padding: 2px 6px; font-size: 0.7rem;" onclick="triggerPinPeer(1)">Fijar Par</button></td>
+                </tr>
+                <tr>
+                  <td><span class="badge-ring-degree">Grado 4</span></td>
+                  <td>00010000...</td>
+                  <td>3 / 10</td>
+                  <td style="color: #38bdf8;">4.20 ms</td>
+                  <td><button class="btn-orbital-action" style="padding: 2px 6px; font-size: 0.7rem;" onclick="triggerPinPeer(4)">Fijar Par</button></td>
+                </tr>
+                <tr>
+                  <td><span class="badge-ring-degree">Grado 8</span></td>
+                  <td>01000000...</td>
+                  <td>2 / 10</td>
+                  <td style="color: #f59e0b;">18.5 ms</td>
+                  <td><button class="btn-orbital-action" style="padding: 2px 6px; font-size: 0.7rem;" onclick="triggerPinPeer(8)">Fijar Par</button></td>
+                </tr>
+                <tr>
+                  <td><span class="badge-ring-degree">Grado 11</span></td>
+                  <td>10000000... (Confines)</td>
+                  <td>1 / 10</td>
+                  <td style="color: #a855f7;">42.1 ms</td>
+                  <td><button class="btn-orbital-action" style="padding: 2px 6px; font-size: 0.7rem;" onclick="triggerPinPeer(11)">Fijar Par</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Estación Criptográfica Híbrida Post-Cuántica (PQC) -->
+        <div class="eng-card">
+          <div class="eng-card-header">
+            <h4><span>⚛️</span> Ciudadela Criptográfica Híbrida Post-Cuántica (PQC)</h4>
+            <span class="badge badge-purple">NIST L3 / ML-DSA-65</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Firmas duales asimétricas y encapsulación KEM para neutralizar la recolección "harvest now, decrypt later".</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="font-size: 0.85rem; color: #fff;">Capa de Firmas Híbridas</strong>
+                <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">Ed25519 (Clásica) + ML-DSA-65 (Retículos PQC)</span>
+              </div>
+              <span class="badge badge-green">ACTIVO ✓</span>
+            </div>
+
+            <div style="background: rgba(255, 255, 255, 0.03); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="font-size: 0.85rem; color: #fff;">Encapsulación de Secretos (KEM)</strong>
+                <span style="font-size: 0.72rem; color: var(--text-muted); display: block;">X25519 (ECDH) + ML-KEM-768 (Kyber L3)</span>
+              </div>
+              <span class="badge badge-green">SFS ACTIVO ✓</span>
+            </div>
+
+            <button class="btn-primary btn-det" onclick="triggerPQCRotation()" style="width: 100%; margin-top: 4px; background: rgba(168, 85, 247, 0.2); border-color: #a855f7; color: #c084fc;">
+              🔄 Forzar Rotación Inmediata de Claves de Sesión PQC
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fila 3: Anulación Quirúrgica (Override Mode) & Telemetría Zero-Copy -->
+      <div class="eng-grid-2">
+        <!-- Panel de Anulación de Automatizaciones (Override Mode) -->
+        <div class="eng-card eng-red-border">
+          <div class="eng-card-header">
+            <h4><span>⚠️</span> Anulación de Automatizaciones (Override Mode)</h4>
+            <span class="engineer-pill-tag" id="override-state-badge">ESTADO: HEURÍSTICA AUTOMÁTICA</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Desactiva la autorreparación heurística para imponer decisiones estáticas inquebrantables.</p>
+          
+          <div class="override-grid">
+            <div class="override-toggle-box" id="box-override-pinned">
+              <strong style="font-size: 0.82rem; color: #fff;">Rutas Estáticas Forzadas</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted);">Inyecta salto directo ignorando convergencia XOR.</span>
+              <button class="btn-override-toggle" id="btn-toggle-pinned" onclick="toggleOverrideOption('pinned')">DESACTIVADO</button>
+            </div>
+
+            <div class="override-toggle-box" id="box-override-quarantine">
+              <strong style="font-size: 0.82rem; color: #fff;">Aislamiento Preventivo</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted);">Expulsa nodos de la tabla de enrutamiento.</span>
+              <button class="btn-override-toggle" id="btn-toggle-quarantine" onclick="toggleOverrideOption('quarantine')">DESACTIVADO</button>
+            </div>
+
+            <div class="override-toggle-box" id="box-override-egress">
+              <strong style="font-size: 0.82rem; color: #fff;">Pasarela Egress-Only</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted);">Bloquea todo tráfico de relevo de terceros.</span>
+              <button class="btn-override-toggle" id="btn-toggle-egress" onclick="toggleOverrideOption('egress')">DESACTIVADO</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Telemetría Crítica Zero-Copy y Ring Buffer Lock-Free -->
+        <div class="eng-card">
+          <div class="eng-card-header">
+            <h4><span>⚡</span> Rendimiento Zero-Copy & Búfer Lock-Free</h4>
+            <span class="badge" style="background: rgba(0, 240, 255, 0.15); color: #00f0ff;">24.5M OPS/S</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">Arquitectura de memoria sincronizada de 3 capas sin alocaciones en el recolector de basura de Go.</p>
+          
+          <div class="perf-stat-row">
+            <div class="perf-stat-card">
+              <span class="perf-stat-num" style="color: #00f0ff;">27.18 ns</span>
+              <span class="perf-stat-lbl">Latencia Ring Buffer O(1)</span>
+            </div>
+            <div class="perf-stat-card">
+              <span class="perf-stat-num" style="color: #10b981;">0 B/op</span>
+              <span class="perf-stat-lbl">Alocaciones Heap Fast-Path</span>
+            </div>
+            <div class="perf-stat-card">
+              <span class="perf-stat-num" style="color: #c084fc;">100%</span>
+              <span class="perf-stat-lbl">Aciertos Pools (1.5K/9K/64K)</span>
+            </div>
+          </div>
+
+          <div style="font-size: 0.76rem; color: var(--text-muted); font-family: var(--font-mono); background: #060912; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.05); margin-top: 6px;">
+            Contadores Atómicos: Retain/Release concurrentes sin clonación de buffers · Soporte 10 Gbps
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Barra de Telemetría Inferior -->
+    <footer class="footer-telemetry glass-card">
+      <div class="t-stat">
+        <span class="t-label">Paquetes Tx</span>
+        <span class="t-val" id="t-tx">0</span>
+      </div>
+      <div class="t-stat">
+        <span class="t-label">Paquetes Rx</span>
+        <span class="t-val" id="t-rx">0</span>
+      </div>
+      <div class="t-stat">
+        <span class="t-label">Descartes</span>
+        <span class="t-val red" id="t-drops">0</span>
+      </div>
+      <div class="t-stat">
+        <span class="t-label">Tit-for-Tat Ratio</span>
+        <span class="t-val green" id="t-ratio">1.00</span>
+      </div>
+      <div class="t-stat">
+        <span class="t-label">Latencia Ring-Buffer</span>
+        <span class="t-val cyan">&lt; 28 ns</span>
+      </div>
+      <div class="t-stat">
+        <span class="t-label">Kùzu Graph DB</span>
+        <span class="t-val purple">14 Nodos PFO</span>
+      </div>
+    </footer>
+
+    <!-- ================================================================== -->
+    <!-- MODAL 1: CHAT SOBERANO E2EE (ESTILO WHATSAPP WEB)                  -->
+    <!-- ================================================================== -->
+    <div class="app-modal-backdrop" id="modal-chat">
+      <div class="chat-modal-window">
+        <!-- Sidebar de Contactos -->
+        <div class="chat-sidebar">
+          <div class="chat-sidebar-header">
+            <span style="font-weight: 700; color: #fff; font-size: 0.95rem;">💬 Malla Chat E2EE</span>
+            <span class="chat-status-badge">ML-KEM-768</span>
+          </div>
+          <div class="chat-contacts-list" id="chat-contacts-list">
+            <div class="chat-contact-item active" onclick="selectChatContact('notebook.ipv7', 'did:ipvn7:e821ef1a17f8...')">
+              <div class="contact-avatar">💻</div>
+              <div class="contact-info">
+                <div class="contact-name">
+                  <span>notebook.ipv7</span>
+                  <span style="font-size: 0.65rem; color: #10b981;">Online</span>
+                </div>
+                <div class="contact-preview">Conexión directa P2P (192.168.1.106)</div>
+              </div>
+            </div>
+            <div class="chat-contact-item" onclick="selectChatContact('gateway.ipv7', 'did:ipvn7:gateway001...')">
+              <div class="contact-avatar">🌐</div>
+              <div class="contact-info">
+                <div class="contact-name">
+                  <span>gateway.ipv7</span>
+                  <span style="font-size: 0.65rem; color: #38bdf8;">Malla</span>
+                </div>
+                <div class="contact-preview">Enrutador perimetral Clase 2</div>
+              </div>
+            </div>
+            <div class="chat-contact-item" onclick="selectChatContact('ai-agent.ipv7', 'did:ipvn7:uin:agent8d60...')">
+              <div class="contact-avatar">🤖</div>
+              <div class="contact-info">
+                <div class="contact-name">
+                  <span>Agente IA Autónomo</span>
+                  <span style="font-size: 0.65rem; color: #c084fc;">UIN Agent</span>
+                </div>
+                <div class="contact-preview">Scope: agente_ia · Listo para tareas</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Área de Conversación -->
+        <div class="chat-main-area">
+          <div class="chat-header">
+            <div class="chat-header-info">
+              <div class="contact-avatar" id="active-chat-avatar">💻</div>
+              <div>
+                <h3 style="font-size: 0.95rem; color: #fff;" id="active-chat-title">notebook.ipv7</h3>
+                <span style="font-size: 0.72rem; color: var(--text-muted);" id="active-chat-did">did:ipvn7:e821ef1a17f84e318f...</span>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="chat-status-badge">Post-Cuántico ✓</span>
+              <button class="btn-chat-icon" onclick="closeAppModal('modal-chat')" style="font-size: 1.1rem;">✕</button>
+            </div>
+          </div>
+
+          <!-- Historial de Mensajes -->
+          <div class="chat-messages-container" id="chat-messages-stream">
+            <div class="chat-bubble incoming">
+              <span>🔒 Canal criptográfico soberano inicializado. Intercambio de claves completado mediante ML-KEM-768 y firmas ML-DSA-65.</span>
+              <div class="bubble-meta">
+                <span>16:40</span>
+              </div>
+            </div>
+            <div class="chat-bubble incoming">
+              <span>¡Hola desde el Notebook! Estoy conectado a la malla ipvn7 sobre el puerto 7001 en Windows.</span>
+              <div class="bubble-meta">
+                <span>16:41</span>
+              </div>
+            </div>
+            <div class="chat-bubble outgoing">
+              <span>Excelente. Todo el tráfico viaja en paquetes deterministas de 1280B con cero metadatos expuestos.</span>
+              <div class="bubble-meta">
+                <span>16:42</span>
+                <span class="chat-check">✓✓</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de Entrada de Chat -->
+          <div class="chat-input-bar">
+            <button class="btn-chat-icon" title="Adjuntar Archivo (DAG Store)" onclick="triggerChatFileAttachment()">📎</button>
+            <input type="text" class="chat-input-field" id="chat-input-message" placeholder="Escribe un mensaje soberano..." onkeydown="handleChatKeyDown(event)">
+            <button class="btn-chat-send" title="Enviar Mensaje" onclick="sendChatMessage()">➤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- MODAL 2: ESCRITORIO REMOTO P2P (ESTILO RUSTDESK)                  -->
+    <!-- ================================================================== -->
+    <div class="app-modal-backdrop" id="modal-remote">
+      <div class="remote-desktop-window">
+        <div class="remote-toolbar">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-weight: 700; color: #fff; font-size: 0.95rem;">🖥️ Escritorio Remoto P2P</span>
+            <span class="chat-status-badge" id="remote-conn-status">CONECTADO</span>
+          </div>
+
+          <div class="remote-stats-row">
+            <span class="remote-stat-pill" id="remote-target-name">Destino: notebook.ipv7 (192.168.1.106)</span>
+            <span class="remote-stat-pill" id="remote-fps">60.0 FPS</span>
+            <span class="remote-stat-pill" id="remote-rtt">RTT: 5.4 ms</span>
+            <span class="remote-stat-pill" style="color: #10b981;" id="remote-sas">SAS: 🎷 🎨 🔮 🎁</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button class="btn-primary btn-det" onclick="toggleRemoteInputGrab()" style="font-size: 0.75rem; padding: 4px 10px;" id="btn-remote-grab">🖱️ Captura Mouse</button>
+            <button class="btn-chat-icon" onclick="closeAppModal('modal-remote')" style="font-size: 1.1rem;">✕</button>
+          </div>
+        </div>
+
+        <div class="remote-canvas-wrapper" id="remote-canvas-wrapper" onmousemove="handleRemoteMouseMove(event)" onclick="handleRemoteCanvasClick(event)">
+          <canvas id="remoteDesktopCanvas" width="960" height="540"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- MODAL 3: MI NUBE PERSONAL (ALMACÉN DAG STORE DTN)                 -->
+    <!-- ================================================================== -->
+    <div class="app-modal-backdrop" id="modal-dag">
+      <div class="dag-cloud-window">
+        <div class="chat-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.3rem;">📁</span>
+            <div>
+              <h3 style="font-size: 0.95rem; color: #fff;">Mi Nube Personal (Almacén DAG Store DTN)</h3>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Almacenamiento inmutable direccionado por contenido (CID SHA-256)</span>
+            </div>
+          </div>
+          <button class="btn-chat-icon" onclick="closeAppModal('modal-dag')">✕</button>
+        </div>
+
+        <div class="dag-dropzone" onclick="document.getElementById('dag-file-picker').click()">
+          <input type="file" id="dag-file-picker" style="display:none;" onchange="handleDAGFileUpload(event)">
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">📥</div>
+          <span style="font-weight: 600; color: #fff; display: block;">Arrastra o selecciona cualquier archivo para almacenar en la malla</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; display: block;">Se fragmentará en bloques deterministas de 1280B y se firmará con tu clave soberana.</span>
+        </div>
+
+        <div class="dag-file-list" id="dag-file-list-container">
+          <div class="dag-file-item">
+            <div>
+              <span style="font-weight: 600; color: #fff; font-size: 0.85rem;">ipvn7_especificacion_v4.pdf</span>
+              <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--primary); margin-top: 2px;">
+                CID: cid:ipvn7:8f93bc1a24d5e7... (48 bloques · 61.4 KB)
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-primary btn-det" onclick="shareCIDToChat('cid:ipvn7:8f93bc1a24d5e7...')" style="font-size: 0.75rem; padding: 4px 10px;">Compartir al Chat</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- MODAL 4: TRANSMISIÓN MULTICAST EN CASCADA                          -->
+    <!-- ================================================================== -->
+    <div class="app-modal-backdrop" id="modal-multicast">
+      <div class="multicast-window">
+        <div class="chat-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.3rem;">📡</span>
+            <div>
+              <h3 style="font-size: 0.95rem; color: #fff;">Transmisión Multicast en Cascada (Zero Broadcast)</h3>
+              <span style="font-size: 0.72rem; color: var(--text-muted);">Replicación en árbol O(log N) sobre anillos de Kleinberg sin saturar tu subida</span>
+            </div>
+          </div>
+          <button class="btn-chat-icon" onclick="closeAppModal('modal-multicast')">✕</button>
+        </div>
+
+        <div class="remote-toolbar" style="background: rgba(0,0,0,0.3);">
+          <div class="remote-stats-row">
+            <span class="remote-stat-pill" id="mc-active-stream">Canal: canal-soberano-01</span>
+            <span class="remote-stat-pill" id="mc-subscribers">Nodos Receptores: 1,024</span>
+            <span class="remote-stat-pill" style="color:#10b981;" id="mc-efficiency">Ahorro de Ancho de Banda: 99.8%</span>
+          </div>
+          <button class="btn-primary btn-det" onclick="broadcastMulticastPacket()" style="font-size: 0.75rem; padding: 6px 14px;">⚡ Emitir Trama Cascada 1280B</button>
+        </div>
+
+        <div class="multicast-tree-area">
+          <canvas id="multicastCanvas" width="880" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- MODAL 5: VPN CORPORATIVA FRICCIÓN CERO PARA MULTINACIONALES       -->
+    <!-- ================================================================== -->
+    <div class="app-modal-backdrop" id="modal-vpn">
+      <div class="vpn-modal-window">
+        <!-- Header -->
+        <div class="chat-header">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 1.5rem;">🛡️</span>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <h3 style="font-size: 1.05rem; color: #fff; font-weight: 700;">VPN Corporativa Fricción Cero</h3>
+                <span class="vpn-chip-badge">ENTERPRISE ZTNA</span>
+                <span class="chat-status-badge" id="modal-vpn-status-badge">CONECTADO</span>
+              </div>
+              <span style="font-size: 0.74rem; color: var(--text-muted);">Túnel cuántico invisible sobre puerto 443 con camuflaje RFC 8446 TLS 1.3 y Zero-Admin</span>
+            </div>
+          </div>
+          <button class="btn-chat-icon" onclick="closeAppModal('modal-vpn')" title="Cerrar">✕</button>
+        </div>
+
+        <!-- Body -->
+        <div class="vpn-modal-body">
+          <!-- Hero Power Banner -->
+          <div class="vpn-hero-banner">
+            <div class="vpn-hero-info">
+              <div class="vpn-hero-status-row">
+                <span class="vpn-status-live-indicator connected" id="modal-vpn-live-indicator">
+                  <span class="status-dot pulsing" style="background: #10b981;"></span>
+                  ESTADO: TÚNEL SOBERANO ACTIVO
+                </span>
+                <span class="badge badge-green" id="modal-vpn-mode-pill">USERSPACE PROXY (:10807 / :10808)</span>
+              </div>
+              <div class="vpn-hero-title" id="modal-vpn-hero-title">Protegido contra inspección DPI de multinacionales</div>
+              <div class="vpn-hero-sub">Todo el tráfico de tu equipo viaja encapsulado en tramas TLS legítimas. Los cortafuegos perimetrales (Palo Alto, Fortinet, CheckPoint, Zscaler) interpretan la conexión como navegación HTTPS estándar.</div>
+            </div>
+
+            <div class="vpn-power-control">
+              <button class="vpn-power-btn active" id="modal-vpn-power-btn" onclick="toggleCorporateVPNConnection()" title="Conectar / Desconectar">
+                <div class="vpn-power-ring"></div>
+                ⏻
+              </button>
+              <span style="font-size: 0.75rem; color: #10b981; font-family: var(--font-mono); font-weight: 600;" id="modal-vpn-power-status-lbl">CONECTADO</span>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div class="vpn-kpi-row">
+            <div class="vpn-kpi-card">
+              <span class="vpn-kpi-label">Pasarela Actual</span>
+              <span class="vpn-kpi-value cyan" id="modal-vpn-kpi-egress">🇩🇪 Frankfurt Hub 01</span>
+            </div>
+            <div class="vpn-kpi-card">
+              <span class="vpn-kpi-label">Latencia RTT Malla</span>
+              <span class="vpn-kpi-value green" id="modal-vpn-kpi-rtt">18.4 ms</span>
+            </div>
+            <div class="vpn-kpi-card">
+              <span class="vpn-kpi-label">Datos Transferidos</span>
+              <span class="vpn-kpi-value purple" id="modal-vpn-kpi-bytes">142.8 MB</span>
+            </div>
+            <div class="vpn-kpi-card">
+              <span class="vpn-kpi-label">Tramas Disfrazadas</span>
+              <span class="vpn-kpi-value cyan" id="modal-vpn-kpi-frames">114,240</span>
+            </div>
+            <div class="vpn-kpi-card">
+              <span class="vpn-kpi-label">Fugas DNS & WebRTC</span>
+              <span class="vpn-kpi-value green" id="modal-vpn-kpi-leaks">0% (BLINDADO)</span>
+            </div>
+          </div>
+
+          <!-- Split Columns -->
+          <div class="vpn-main-split">
+            <!-- Columna Izquierda -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- Selector de Modo -->
+              <div class="card glass-card" style="padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <h4 style="color:#fff; font-size: 0.92rem;">Modo de Despliegue Fricción Cero</h4>
+                  <span class="badge badge-green">DETECCIÓN INTELIGENTE</span>
+                </div>
+                <div class="vpn-mode-selector-grid">
+                  <div class="vpn-mode-card selected" id="modal-mode-card-userspace" onclick="setCorporateVPNMode('USERSPACE_PROXY')">
+                    <div class="vpn-mode-header">
+                      <span class="vpn-mode-title">⚡ Zero-Admin Proxy</span>
+                      <span style="color:#00f0ff; font-size: 0.75rem;">● En Uso</span>
+                    </div>
+                    <p class="vpn-mode-desc">SOCKS5 <code>:10807</code> + HTTP <code>:10808</code>. Cero permisos de root ni instalación de drivers. Ideal para laptops corporativas.</p>
+                  </div>
+
+                  <div class="vpn-mode-card" id="modal-mode-card-kernel" onclick="setCorporateVPNMode('KERNEL_TUN')">
+                    <div class="vpn-mode-header">
+                      <span class="vpn-mode-title">⚙️ Kernel TUN Nativo</span>
+                      <span style="color:#94a3b8; font-size: 0.75rem;">Root</span>
+                    </div>
+                    <p class="vpn-mode-desc">Adaptador virtual <code>ipv70</code> L3. Rutea todo el sistema operativo con aceleración en anillo de kernel.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Camuflaje Anti-DPI -->
+              <div class="card glass-card" style="padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <h4 style="color:#fff; font-size: 0.92rem;">Camuflaje Anti-DPI TLS 1.3 (Puerto 443)</h4>
+                  <button class="btn-scale active" id="modal-btn-toggle-dpi" onclick="toggleCorporateAntiDPI()">Disfraz Activo ✓</button>
+                </div>
+                <p style="font-size: 0.74rem; color: var(--text-muted);">Encapsulación en caliente de datagramas 1280B en cabeceras RFC 8446 ApplicationData.</p>
+
+                <div class="vpn-dpi-box" style="margin-top: 8px; padding: 12px;">
+                  <div style="font-family: var(--font-mono); font-size: 0.72rem; color: #94a3b8; display: flex; justify-content: space-between;">
+                    <span>Visor de Tramas en Vivo:</span>
+                    <span style="color:#10b981;">0x17 0x03 0x03</span>
+                  </div>
+                  <div class="vpn-hex-stream" id="modal-vpn-hex-display" style="font-size: 0.74rem; margin: 8px 0;">
+                    0x17 0x03 0x03 0x05 0x00 [CHACHA20-POLY1305 ENCRYPTED FRAME ... 1280B]
+                  </div>
+                  <div class="vpn-firewall-bypass-grid">
+                    <div class="vpn-bypass-item"><span class="check">✓</span> Palo Alto PAN-OS (ssl-web-browsing)</div>
+                    <div class="vpn-bypass-item"><span class="check">✓</span> Fortinet FortiGate DPI Bypass</div>
+                    <div class="vpn-bypass-item"><span class="check">✓</span> Zscaler Cloud Sandbox</div>
+                    <div class="vpn-bypass-item"><span class="check">✓</span> Cisco Firepower Next-Gen</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Columna Derecha -->
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- Egress Gateways -->
+              <div class="card glass-card" style="padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <h4 style="color:#fff; font-size: 0.92rem;">Pasarela de Salida Multijurisdiccional</h4>
+                  <span class="badge badge-blue">5 NODOS DE SALIDA</span>
+                </div>
+                <div class="vpn-egress-list">
+                  <div class="vpn-egress-card active" id="modal-egress-fra" onclick="selectCorporateVPNEgress('fra', 'Frankfurt Hub 01', '18.4 ms', '🇩🇪')">
+                    <div class="vpn-egress-info">
+                      <span class="vpn-flag">🇩🇪</span>
+                      <div>
+                        <div class="vpn-egress-name">Frankfurt, Alemania</div>
+                        <div class="vpn-egress-fqdn">egress-fra-01.corp.ipvn7.net</div>
+                      </div>
+                    </div>
+                    <div class="vpn-egress-stats">
+                      <span class="vpn-egress-rtt">18.4 ms</span>
+                      <span class="vpn-chip-badge" style="color:#10b981; border-color:#10b981;">ACTIVO</span>
+                    </div>
+                  </div>
+
+                  <div class="vpn-egress-card" id="modal-egress-zrh" onclick="selectCorporateVPNEgress('zrh', 'Zurich Node 02', '24.1 ms', '🇨🇭')">
+                    <div class="vpn-egress-info">
+                      <span class="vpn-flag">🇨🇭</span>
+                      <div>
+                        <div class="vpn-egress-name">Zúrich, Suiza (Secreto Bancario)</div>
+                        <div class="vpn-egress-fqdn">egress-zrh-01.corp.ipvn7.net</div>
+                      </div>
+                    </div>
+                    <div class="vpn-egress-stats">
+                      <span class="vpn-egress-rtt">24.1 ms</span>
+                    </div>
+                  </div>
+
+                  <div class="vpn-egress-card" id="modal-egress-tyo" onclick="selectCorporateVPNEgress('tyo', 'Tokyo Hub 03', '132.8 ms', '🇯🇵')">
+                    <div class="vpn-egress-info">
+                      <span class="vpn-flag">🇯🇵</span>
+                      <div>
+                        <div class="vpn-egress-name">Tokio, Japón (APAC Hub)</div>
+                        <div class="vpn-egress-fqdn">egress-tyo-01.corp.ipvn7.net</div>
+                      </div>
+                    </div>
+                    <div class="vpn-egress-stats">
+                      <span class="vpn-egress-rtt">132.8 ms</span>
+                    </div>
+                  </div>
+
+                  <div class="vpn-egress-card" id="modal-egress-nyc" onclick="selectCorporateVPNEgress('nyc', 'New York Gateway 04', '78.2 ms', '🇺🇸')">
+                    <div class="vpn-egress-info">
+                      <span class="vpn-flag">🇺🇸</span>
+                      <div>
+                        <div class="vpn-egress-name">Nueva York, EE.UU. (Wall St)</div>
+                        <div class="vpn-egress-fqdn">egress-nyc-01.corp.ipvn7.net</div>
+                      </div>
+                    </div>
+                    <div class="vpn-egress-stats">
+                      <span class="vpn-egress-rtt">78.2 ms</span>
+                    </div>
+                  </div>
+
+                  <div class="vpn-egress-card" id="modal-egress-sin" onclick="selectCorporateVPNEgress('sin', 'Singapore Hub 05', '155.0 ms', '🇸🇬')">
+                    <div class="vpn-egress-info">
+                      <span class="vpn-flag">🇸🇬</span>
+                      <div>
+                        <div class="vpn-egress-name">Singapur (Sureste Asiático)</div>
+                        <div class="vpn-egress-fqdn">egress-sin-01.corp.ipvn7.net</div>
+                      </div>
+                    </div>
+                    <div class="vpn-egress-stats">
+                      <span class="vpn-egress-rtt">155.0 ms</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ZTNA & Blackout Recovery -->
+              <div class="card glass-card" style="padding: 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <h4 style="color:#fff; font-size: 0.92rem;">Micro-segmentación ZTNA (Default-Deny)</h4>
+                  <span class="badge badge-purple">ZERO TRUST</span>
+                </div>
+                <div class="vpn-ztna-tester">
+                  <div class="vpn-ztna-input-row">
+                    <input type="text" id="modal-ztna-query-input" placeholder="Recurso o DID..." value="jira.internal.corp">
+                    <button class="btn-primary btn-det" onclick="testZTNAEnterpriseAccess('modal')">Test ZTNA</button>
+                  </div>
+                  <div class="vpn-ztna-result-box" id="modal-ztna-result-display">
+                    <span style="color:#10b981;">✓ ACCESO PERMITIDO:</span> DID autenticado en grupo de ingeniería corporativa.
+                  </div>
+                </div>
+
+                <!-- Blackout Recovery Widget -->
+                <div class="vpn-blackout-box" style="margin-top: 10px; padding: 12px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 600; font-size: 0.82rem; color: #fff;">⚡ Resiliencia Post-Apagón & EBRA</span>
+                    <span class="vpn-phase-pill" id="modal-blackout-phase-pill">RED CONVERGIDA P2P</span>
+                  </div>
+                  <div class="vpn-blackout-progress-row" style="margin: 8px 0;">
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">Jitter Decorrelacionado:</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.74rem; color: #c084fc;" id="modal-blackout-jitter-val">14.8s ± 4.2s (Anti-Estampida)</span>
+                  </div>
+                  <button class="btn-primary btn-det" onclick="simulateBlackoutRecoveryCascade()" style="width: 100%; font-size: 0.75rem; padding: 5px 10px;">⚡ Simular Recuperación Post-Apagón (5 Fases)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="vpn-footer-toolbar">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Configuración Rápida de 1 Clic:</span>
+            <button class="btn-primary btn-det" onclick="copyVPNEasyPAC()" style="font-size: 0.74rem; padding: 4px 12px;">📋 Copiar Script PAC Proxy</button>
+            <button class="btn-primary btn-det" onclick="runVPNWebRTCLeakTest()" style="font-size: 0.74rem; padding: 4px 12px;">🔍 Test Fuga WebRTC/DNS</button>
+          </div>
+          <div class="vpn-footer-actions">
+            <button class="btn-chat-icon" onclick="closeAppModal('modal-vpn')" style="font-size: 0.82rem; color: var(--text-muted);">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script src="/app.js"></script>
+</body>
+</html>

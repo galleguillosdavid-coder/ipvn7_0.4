@@ -1,0 +1,82 @@
+name: ipvn7 Network OS - Cross-Platform Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build & Release Multi-Arch Binaries
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Linux AMD64
+          - goos: linux
+            goarch: amd64
+            artifact_name: ipvn7-linux-amd64
+            cli_name: ipvn7-cli-linux-amd64
+            archive_name: ipvn7-v0.3.0-linux-amd64.tar.gz
+          # Linux ARM64 (Raspberry Pi, Cloud ARM)
+          - goos: linux
+            goarch: arm64
+            artifact_name: ipvn7-linux-arm64
+            cli_name: ipvn7-cli-linux-arm64
+            archive_name: ipvn7-v0.3.0-linux-arm64.tar.gz
+          # Windows AMD64
+          - goos: windows
+            goarch: amd64
+            artifact_name: ipvn7-windows-amd64.exe
+            cli_name: ipvn7-cli-windows-amd64.exe
+            archive_name: ipvn7-v0.3.0-windows-amd64.zip
+          # macOS Universal (Darwin ARM64 / Apple Silicon)
+          - goos: darwin
+            goarch: arm64
+            artifact_name: ipvn7-darwin-arm64
+            cli_name: ipvn7-cli-darwin-arm64
+            archive_name: ipvn7-v0.3.0-darwin-arm64.tar.gz
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+          cache: true
+
+      - name: Build Core Node Daemon (${{ matrix.goos }}/${{ matrix.goarch }})
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: 0
+        run: |
+          go build -trimpath -ldflags="-s -w" -o dist/${{ matrix.artifact_name }} ./cmd/ipvn7
+          go build -trimpath -ldflags="-s -w" -o dist/${{ matrix.cli_name }} ./cmd/ipvn7-cli
+
+      - name: Package Distribution Bundle
+        run: |
+          mkdir -p bundle
+          cp dist/${{ matrix.artifact_name }} bundle/
+          cp dist/${{ matrix.cli_name }} bundle/
+          cp -r web bundle/web
+          cp README.md bundle/
+          if [ "${{ matrix.goos }}" = "windows" ]; then
+            cd bundle && zip -r ../${{ matrix.archive_name }} ./* && cd ..
+          else
+            cd bundle && tar -czf ../${{ matrix.archive_name }} ./* && cd ..
+          fi
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ matrix.archive_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
