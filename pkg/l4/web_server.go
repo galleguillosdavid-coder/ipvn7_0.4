@@ -152,7 +152,7 @@ func NewWebDashboardServer(
 		LiveStream:    NewLiveStreamManager(id),
 		AudioRadio:    NewAudioRadioManager(id),
 		Probe:         l1.NewNetworkProbeEngine(id, router),
-		Blackout:      l1.NewBlackoutRecoveryManager(id, l1.NewBlindRendezvousManager(id, l1.NewMemoryBlindBeaconStore(), "ipvn7-sovereign-v0.4")),
+		Blackout:      l1.NewBlackoutRecoveryManager(id, l1.NewBlindRendezvousManager(id, l1.NewHybridBlindBeaconStore(""), "ipvn7-sovereign-v0.4")),
 		CopilotMode:   "off",
 		StartTime:     time.Now(),
 		StaticDir:     staticDir,

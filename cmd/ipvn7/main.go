@@ -217,7 +217,16 @@ func main() {
 			// 5. Manejar según tipo de mensaje
 			if pkt.Type == l0.MsgTypeRoamingUpdate {
 				if udpAddr, ok := remoteAddr.(*net.UDPAddr); ok {
-					_ = router.HandleRoamingUpdate(pkt, udpAddr)
+					if err := router.HandleRoamingUpdate(pkt, udpAddr); err == nil {
+						webServer.Firewall.AuthorizeDID(&l1.DIDPolicy{
+							DID:           senderDID,
+							AllowInbound:  true,
+							AllowOutbound: true,
+							AllowRelay:    true,
+						})
+						webServer.Kuzu.UpsertPeer(senderDID, "", "kleinberg_peer", false)
+						webServer.Blackout.Rendezvous.NotifyDirectPeerConnected()
+					}
 				}
 			}
 
@@ -225,6 +234,20 @@ func main() {
 			pktBuf.Release()
 		}
 	}()
+
+	// 6. Iniciar Motor de Descubrimiento Autónomo (EBRA + STUN WAN + LAN Broadcast)
+	discoveryEngine := l1.NewAutonomousDiscoveryEngine(
+		identity,
+		router,
+		webServer.Blackout.Rendezvous,
+		webServer.Firewall,
+		webServer.Kuzu,
+		conn,
+		*listenPort,
+	)
+	discoveryEngine.Start()
+	defer discoveryEngine.Stop()
+	fmt.Println("[+] Motor de Descubrimiento Autónomo EBRA/STUN activo en segundo plano.")
 
 	// Pulsos periódicos de mantenimiento y telemetría
 	ticker := time.NewTicker(10 * time.Second)

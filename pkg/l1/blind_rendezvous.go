@@ -5,6 +5,8 @@
 package l1
 
 import (
+	"bufio"
+	"bytes"
 	"crypto/ed25519"
 	"crypto/rand"
 	"crypto/sha256"
@@ -12,6 +14,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net/http"
+	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -30,6 +34,12 @@ type BlindBeaconStore interface {
 	PutBeacon(topic string, data []byte, ttl time.Duration) error
 	GetBeacon(topic string) ([]byte, error)
 	DeleteBeacon(topic string) error
+}
+
+// MultiBlindBeaconStore extiende BlindBeaconStore para obtener todas las balizas vigentes en un tópico
+type MultiBlindBeaconStore interface {
+	BlindBeaconStore
+	GetAllBeacons(topic string) ([][]byte, error)
 }
 
 // MemoryBlindBeaconStore implementa almacenamiento en memoria para entornos locales o de prueba
@@ -73,10 +83,156 @@ func (m *MemoryBlindBeaconStore) GetBeacon(topic string) ([]byte, error) {
 	return b.data, nil
 }
 
+func (m *MemoryBlindBeaconStore) GetAllBeacons(topic string) ([][]byte, error) {
+	b, err := m.GetBeacon(topic)
+	if err != nil {
+		return nil, err
+	}
+	return [][]byte{b}, nil
+}
+
 func (m *MemoryBlindBeaconStore) DeleteBeacon(topic string) error {
 	m.mu.Lock()
 	defer m.mu.Unlock()
 	delete(m.beacons, topic)
+	return nil
+}
+
+// HTTPBlindBeaconStore implementa señalización efímera WAN usando sustratos públicos Zero-Knowledge
+type HTTPBlindBeaconStore struct {
+	baseURL    string
+	httpClient *http.Client
+}
+
+// NewHTTPBlindBeaconStore inicializa el sustrato HTTP para balizas EBRA públicas
+func NewHTTPBlindBeaconStore(baseURL string) *HTTPBlindBeaconStore {
+	if baseURL == "" {
+		baseURL = "https://ntfy.sh"
+	}
+	return &HTTPBlindBeaconStore{
+		baseURL: strings.TrimRight(baseURL, "/"),
+		httpClient: &http.Client{
+			Timeout: 4 * time.Second,
+		},
+	}
+}
+
+func (h *HTTPBlindBeaconStore) topicURL(topic string) string {
+	return fmt.Sprintf("%s/ipvn7-sovereign-v04-%s", h.baseURL, topic)
+}
+
+func (h *HTTPBlindBeaconStore) PutBeacon(topic string, data []byte, ttl time.Duration) error {
+	url := h.topicURL(topic)
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Title", "EBRA Beacon")
+	req.Header.Set("Priority", "urgent")
+	req.Header.Set("Tags", "satellite,key")
+
+	resp, err := h.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode >= 400 {
+		return fmt.Errorf("HTTP error %d publicando baliza EBRA", resp.StatusCode)
+	}
+	return nil
+}
+
+func (h *HTTPBlindBeaconStore) GetBeacon(topic string) ([]byte, error) {
+	all, err := h.GetAllBeacons(topic)
+	if err != nil || len(all) == 0 {
+		return nil, errors.New("baliza no encontrada en sustrato WAN")
+	}
+	return all[len(all)-1], nil
+}
+
+func (h *HTTPBlindBeaconStore) GetAllBeacons(topic string) ([][]byte, error) {
+	url := fmt.Sprintf("%s/json?poll=1&since=10m", h.topicURL(topic))
+	resp, err := h.httpClient.Get(url)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode >= 400 {
+		return nil, fmt.Errorf("HTTP error %d leyendo balizas", resp.StatusCode)
+	}
+
+	var results [][]byte
+	scanner := bufio.NewScanner(resp.Body)
+	for scanner.Scan() {
+		line := bytes.TrimSpace(scanner.Bytes())
+		if len(line) == 0 {
+			continue
+		}
+		var msg struct {
+			Event   string `json:"event"`
+			Message string `json:"message"`
+		}
+		if err := json.Unmarshal(line, &msg); err == nil && msg.Event == "message" && msg.Message != "" {
+			results = append(results, []byte(msg.Message))
+		}
+	}
+	if len(results) == 0 {
+		return nil, errors.New("no hay balizas activas en el tópico")
+	}
+	return results, nil
+}
+
+func (h *HTTPBlindBeaconStore) DeleteBeacon(topic string) error {
+	return nil
+}
+
+// HybridBlindBeaconStore unifica la memoria local con el sustrato WAN HTTP
+type HybridBlindBeaconStore struct {
+	mem  *MemoryBlindBeaconStore
+	http *HTTPBlindBeaconStore
+}
+
+// NewHybridBlindBeaconStore inicializa el almacén híbrido de balizas (Local + WAN)
+func NewHybridBlindBeaconStore(baseURL string) *HybridBlindBeaconStore {
+	return &HybridBlindBeaconStore{
+		mem:  NewMemoryBlindBeaconStore(),
+		http: NewHTTPBlindBeaconStore(baseURL),
+	}
+}
+
+func (s *HybridBlindBeaconStore) PutBeacon(topic string, data []byte, ttl time.Duration) error {
+	_ = s.mem.PutBeacon(topic, data, ttl)
+	go func() {
+		_ = s.http.PutBeacon(topic, data, ttl)
+	}()
+	return nil
+}
+
+func (s *HybridBlindBeaconStore) GetBeacon(topic string) ([]byte, error) {
+	if b, err := s.mem.GetBeacon(topic); err == nil {
+		return b, nil
+	}
+	return s.http.GetBeacon(topic)
+}
+
+func (s *HybridBlindBeaconStore) GetAllBeacons(topic string) ([][]byte, error) {
+	var list [][]byte
+	if b, err := s.mem.GetBeacon(topic); err == nil {
+		list = append(list, b)
+	}
+	if remoteList, err := s.http.GetAllBeacons(topic); err == nil {
+		list = append(list, remoteList...)
+	}
+	if len(list) == 0 {
+		return nil, errors.New("no hay balizas disponibles")
+	}
+	return list, nil
+}
+
+func (s *HybridBlindBeaconStore) DeleteBeacon(topic string) error {
+	_ = s.mem.DeleteBeacon(topic)
+	_ = s.http.DeleteBeacon(topic)
 	return nil
 }
 
@@ -232,6 +388,71 @@ func (b *BlindRendezvousManager) DiscoverPeer(ringDegree int) (*BeaconContent, e
 	}
 
 	return &content, nil
+}
+
+// DiscoverAllPeers busca y descifra todas las balizas ciegas de pares en el cuadrante temporal
+func (b *BlindRendezvousManager) DiscoverAllPeers(ringDegree int) ([]*BeaconContent, error) {
+	topicID := DeriveTopicID(time.Now(), ringDegree, b.NetworkSeed)
+
+	var rawEnvs [][]byte
+	if multi, ok := b.Store.(MultiBlindBeaconStore); ok {
+		rawEnvs, _ = multi.GetAllBeacons(topicID)
+	}
+	if len(rawEnvs) == 0 {
+		single, err := b.Store.GetBeacon(topicID)
+		if err != nil {
+			return nil, err
+		}
+		rawEnvs = append(rawEnvs, single)
+	}
+
+	var discovered []*BeaconContent
+	seenDID := make(map[string]bool)
+
+	for _, rawEnv := range rawEnvs {
+		var envelope BlindBeaconEnvelope
+		if err := json.Unmarshal(rawEnv, &envelope); err != nil {
+			continue
+		}
+
+		// Descifrar contenido
+		key := sha256.Sum256([]byte(fmt.Sprintf("%s:%s", envelope.TopicID, b.NetworkSeed)))
+		plain := make([]byte, len(envelope.Ciphertext))
+		for i := range envelope.Ciphertext {
+			plain[i] = envelope.Ciphertext[i] ^ key[i%len(key)]
+		}
+
+		var content BeaconContent
+		if err := json.Unmarshal(plain, &content); err != nil {
+			continue
+		}
+
+		// Ignorar baliza propia
+		if content.DID == b.Identity.DID() {
+			continue
+		}
+
+		if seenDID[content.DID] {
+			continue
+		}
+
+		// Verificar firma digital Ed25519 del emisor
+		pub, err := l0.PublicKeyFromDID(content.DID)
+		if err != nil {
+			continue
+		}
+
+		signData := fmt.Sprintf("%s|%s|%d|%s", content.DID, content.Endpoint, content.Timestamp, content.Nonce)
+		sig, err := hex.DecodeString(content.Signature)
+		if err != nil || !ed25519.Verify(pub, []byte(signData), sig) {
+			continue
+		}
+
+		seenDID[content.DID] = true
+		discovered = append(discovered, &content)
+	}
+
+	return discovered, nil
 }
 
 // ConsumeAndBurn elimina la baliza leída del almacén para garantizar no-persistencia
