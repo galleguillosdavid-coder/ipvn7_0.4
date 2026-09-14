@@ -11,6 +11,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"ipvn7/pkg/l0"
 )
 
 const (
@@ -115,7 +117,7 @@ func (fp *XDPFastPathEngine) SyncRouteFromKuzu(did string, nextIP string, degree
 	}
 }
 
-// ProcessPacketFastPath simula/ejecuta la decisión del gancho XDP en el camino crítico
+// ProcessPacketFastPath ejecuta la decisión del gancho XDP en el camino crítico
 func (fp *XDPFastPathEngine) ProcessPacketFastPath(packetBytes []byte) int {
 	atomic.AddUint64(&fp.RxPackets, 1)
 
@@ -125,18 +127,35 @@ func (fp *XDPFastPathEngine) ProcessPacketFastPath(packetBytes []byte) int {
 		return XDPActionDrop
 	}
 
-	// Inspección de cabecera L0 soberana
-	// En un paquete ipvn7 estándar, los primeros bytes contienen el identificador de protocolo o KEM
+	// 1. Inspección de cabecera de cable L0 soberana
+	var destDID string
+	if pkt, err := l0.DecodePacket(packetBytes); err == nil && pkt.Magic == l0.MagicBytes {
+		destDID = pkt.DestDID
+	}
+
+	// 2. Inspección hash en RoutingMap de BPF
 	fp.mu.RLock()
 	routesCount := len(fp.RoutingMap)
+	var route *XDPRouteEntry
+	if destDID != "" {
+		route = fp.RoutingMap[destDID]
+	} else if routesCount > 0 {
+		// Fast-path kernel: seleccionar ruta disponible en el mapa
+		for _, r := range fp.RoutingMap {
+			route = r
+			break
+		}
+	}
 	fp.mu.RUnlock()
 
-	if routesCount > 0 {
-		// Enrutamiento directo kernel por mapa HASH
+	if route != nil {
+		// Enrutamiento directo kernel por mapa HASH BPF
+		atomic.AddUint64(&route.PacketsRouted, 1)
 		atomic.AddUint64(&fp.XDPRedirected, 1)
 		return XDPActionRedirect
 	}
 
+	// Sin ruta en mapa XDP: subir a la pila de red L1/L2
 	atomic.AddUint64(&fp.XDPPassed, 1)
 	return XDPActionPass
 }

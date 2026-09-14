@@ -252,11 +252,15 @@ async function startPolling() {
 async function fetchStatus() {
   try {
     const res = await fetch("/api/status");
-    if (!res.ok) return;
+    if (!res.ok) {
+      updateHumanOrbState(null);
+      return;
+    }
     const data = await res.json();
     updateUI(data);
+    updateHumanOrbState(data);
   } catch (err) {
-    // Modo standalone / simulado
+    updateHumanOrbState(null);
   }
 }
 
@@ -2859,41 +2863,177 @@ function tickVPNTelemetry() {
   if (tFrames) tFrames.textContent = frames;
 }
 
-let blackoutSimulationRunning = false;
+// ==============================================================================
+// NIVEL 0: LÓGICA DE LA ESFERA VIVA SOBERANA & EXPERIENCIA HUMANA (SKILL 8.0)
+// ==============================================================================
 
-function simulateBlackoutRecoveryCascade() {
-  if (blackoutSimulationRunning) return;
-  blackoutSimulationRunning = true;
+let isHumanTrayExpanded = true;
+let isAdvancedModeActive = false;
+
+function initHumanLevel0() {
+  const savedMode = localStorage.getItem("ipvn7_ui_mode");
+  if (savedMode === "advanced") {
+    enableAdvancedMode(false);
+  } else {
+    disableAdvancedMode(false);
+  }
+}
+
+function toggleHumanOptions() {
+  const tray = document.getElementById("humanOptionsTray");
+  const chevron = document.getElementById("humanTapChevron");
+  const btnText = document.getElementById("btnHumanTapText");
+  if (!tray) return;
+
+  isHumanTrayExpanded = !isHumanTrayExpanded;
+  if (isHumanTrayExpanded) {
+    tray.classList.remove("collapsed");
+    tray.classList.add("expanded");
+    if (chevron) chevron.classList.add("open");
+    if (btnText) btnText.textContent = "▲ Ocultar opciones rápidas";
+  } else {
+    tray.classList.remove("expanded");
+    tray.classList.add("collapsed");
+    if (chevron) chevron.classList.remove("open");
+    if (btnText) btnText.textContent = "✨ Toca aquí para ver tus opciones";
+  }
+}
+
+function enableAdvancedMode(smoothScroll = true) {
+  isAdvancedModeActive = true;
+  localStorage.setItem("ipvn7_ui_mode", "advanced");
+
+  const techWrapper = document.getElementById("technical-dashboard-wrapper");
+  const btnHeader = document.getElementById("btnHeaderModeToggle");
+  const humanSection = document.getElementById("human-level0-section");
+
+  if (techWrapper) techWrapper.style.display = "block";
+  if (btnHeader) btnHeader.style.display = "inline-flex";
+  if (humanSection) humanSection.style.opacity = "0.85";
+
+  if (smoothScroll && techWrapper) {
+    techWrapper.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+function disableAdvancedMode(smoothScroll = true) {
+  isAdvancedModeActive = false;
+  localStorage.setItem("ipvn7_ui_mode", "simple");
+
+  const techWrapper = document.getElementById("technical-dashboard-wrapper");
+  const btnHeader = document.getElementById("btnHeaderModeToggle");
+  const humanSection = document.getElementById("human-level0-section");
+
+  if (techWrapper) techWrapper.style.display = "none";
+  if (btnHeader) btnHeader.style.display = "none";
+  if (humanSection) {
+    humanSection.style.opacity = "1";
+    if (smoothScroll) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+}
+
+function toggleUIMode() {
+  if (isAdvancedModeActive) {
+    disableAdvancedMode(true);
+  } else {
+    enableAdvancedMode(true);
+  }
+}
+
+function updateHumanOrbState(data) {
+  const orb = document.getElementById("humanOrb");
+  const orbIcon = document.getElementById("humanOrbIcon");
+  const title = document.getElementById("humanStatusTitle");
+  const desc = document.getElementById("humanStatusDesc");
+  if (!orb || !title || !desc) return;
+
+  if (!data) {
+    // Estado ROJO: Desconectado
+    orb.className = "human-orb red";
+    if (orbIcon) orbIcon.textContent = "⚠️";
+    title.textContent = "Estás desconectado";
+    desc.textContent = "El nodo soberano local está en pausa. Toca la esfera para verificar el estado de tu red.";
+    return;
+  }
+
+  // Estado AMARILLO: Conectando / Sincronizando
+  if (data.is_connecting) {
+    orb.className = "human-orb yellow";
+    if (orbIcon) orbIcon.textContent = "⏳";
+    title.textContent = "Conectando con la red libre...";
+    desc.textContent = "Buscando la ruta más rápida y segura entre los vecinos de la malla.";
+    return;
+  }
+
+  // Estado VERDE: Conectado y 100% Protegido
+  orb.className = "human-orb green";
+  if (orbIcon) orbIcon.textContent = "🛡️";
+  title.textContent = "Estás conectado y 100% protegido";
+  desc.textContent = "Tu internet ahora es libre, privado y directo. Ningún intermediario ni proveedor puede rastrearte ni intervenir tus canales.";
+}
+
+function playDefaultRadio() {
+  if (window.audioEngine) {
+    window.audioEngine.playStation("radio-lofi-01");
+    const btn = document.getElementById("btnHumanMusic");
+    if (btn) {
+      btn.textContent = "▶ Reproduciendo (432Hz)";
+      btn.style.color = "#00f0ff";
+    }
+  }
+}
+
+async function triggerHumanBlackoutRecovery() {
+  const btn = document.getElementById("btnHumanRecover");
+  if (btn) btn.textContent = "⚡ Reconectando...";
+  await executeRealBlackoutRecovery();
+  if (btn) btn.textContent = "✓ Red Verificada";
+  setTimeout(() => {
+    if (btn) btn.textContent = "Probar Reconexión";
+  }, 4000);
+}
+
+// Protocolo Real de Recuperación en Cascada (5 Fases en Go)
+let blackoutRunning = false;
+
+async function executeRealBlackoutRecovery() {
+  if (blackoutRunning) return;
+  blackoutRunning = true;
 
   const mPill = document.getElementById("modal-blackout-phase-pill");
   const tPill = document.getElementById("tab-blackout-phase-pill");
   const mJitter = document.getElementById("modal-blackout-jitter-val");
   const tJitter = document.getElementById("tab-blackout-jitter-val");
 
-  const phases = [
-    { badge: "FASE 1: MEMORIA KÙZUDB", jitter: "2.1s (Sondeo Silencioso)" },
-    { badge: "FASE 2: PROXIMIDAD OFFGRID", jitter: "4.8s (BLE / LoRa / Wi-Fi Dir)" },
-    { badge: "FASE 3: SONDEO WAN STUN", jitter: "8.4s (Reflexivo RFC 5389)" },
-    { badge: "FASE 4: BALIZA CIEGA (EBRA)", jitter: "16.2s (Zero-Knowledge)" },
-    { badge: "FASE 5: RED CONVERGIDA P2P", jitter: "14.8s ± 4.2s (Desacoplado ✓)" }
-  ];
+  try {
+    const res = await fetch("/api/mesh/blackout/cascade", { method: "POST" });
+    if (res.ok) {
+      const data = await res.json();
+      if (mPill) mPill.textContent = data.phase;
+      if (tPill) tPill.textContent = data.phase;
+      if (mJitter) mJitter.textContent = `${data.jitter_ms.toFixed(1)} ms (Jitter Estocástico)`;
+      if (tJitter) tJitter.textContent = `${data.jitter_ms.toFixed(1)} ms (Descorrelacionado)`;
 
-  phases.forEach((p, idx) => {
-    setTimeout(() => {
-      if (mPill) mPill.textContent = p.badge;
-      if (tPill) tPill.textContent = p.badge;
-      if (mJitter) mJitter.textContent = p.jitter;
-      if (tJitter) tJitter.textContent = p.jitter;
-
-      if (idx === phases.length - 1) {
-        blackoutSimulationRunning = false;
+      if (data.stun_result && data.stun_result.public_ip) {
+        console.log(`[Blackout] Salida WAN Verificada RFC 5389: ${data.stun_result.public_ip}:${data.stun_result.public_port}`);
       }
-    }, idx * 1000);
-  });
+    }
+  } catch (err) {
+    console.warn("[Blackout] Error ejecutando protocolo post-apagón:", err);
+  } finally {
+    blackoutRunning = false;
+  }
+}
+
+function simulateBlackoutRecoveryCascade() {
+  return executeRealBlackoutRecovery();
 }
 
 // Iniciar automáticamente en estado óptimo
 document.addEventListener("DOMContentLoaded", () => {
+  initHumanLevel0();
   syncCorporateVPNUI();
   if (window.location.hash === "#vpn") {
     openCorporateVPNModal();

@@ -117,11 +117,21 @@ class NetworkProbeManager {
     if (this.peersAuditedDisplay) this.peersAuditedDisplay.textContent = `${rep.peers_audited} pares Kleinberg`;
 
     // Incidentes de Censura e Interferencia
+    const humanBadge = document.getElementById("humanProbeBadge");
     if (this.incidentsContainer) {
       this.incidentsContainer.innerHTML = "";
       if (!rep.censorship_incidents || rep.censorship_incidents.length === 0) {
-        this.incidentsContainer.innerHTML = '<div style="color: #10b981; font-size: 0.8rem; padding: 10px;">✓ Cero interferencias detectadas. Ruta limpia y transparente.</div>';
+        this.incidentsContainer.innerHTML = '<div style="color: #10b981; font-size: 0.8rem; padding: 10px;">✓ Cero interferencias detectadas. Tu conexión está completamente libre y sin censura.</div>';
+        if (humanBadge) {
+          humanBadge.textContent = "100% Limpia";
+          humanBadge.style.color = "#10b981";
+        }
         return;
+      }
+
+      if (humanBadge) {
+        humanBadge.textContent = `${rep.censorship_incidents.length} Alerta(s)`;
+        humanBadge.style.color = "#f59e0b";
       }
 
       rep.censorship_incidents.forEach((inc) => {

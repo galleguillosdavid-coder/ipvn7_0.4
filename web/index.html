@@ -45,14 +45,127 @@
           <span class="status-dot pulsing"></span>
           <span id="node-env">WSL2 Linux Kernel Node</span>
         </div>
+        <button class="btn-return-simple-mode" id="btnHeaderModeToggle" onclick="toggleUIMode()" style="display: none;" title="Regresar a vista simple">🌿 Modo Simple</button>
         <div class="uptime-badge" id="uptime-display">Uptime: 00:00:00</div>
       </div>
     </header>
 
-    <!-- Barra de Selección de Niveles de Operación (1 al 7) -->
-    <section class="card glass-card level-selector-card">
-      <div class="level-top-row">
-        <div class="level-title-group">
+    <!-- ==================================================================== -->
+    <!-- NIVEL 0: ESFERA VIVA SOBERANA (MODO HUMANO / SIMPLE / INTUITIVO)    -->
+    <!-- ==================================================================== -->
+    <section class="human-level0-hero glass-card" id="human-level0-section">
+      <!-- Orbe Central Palpitante (Verde / Amarillo / Rojo) -->
+      <div class="human-orb-container" id="humanOrbContainer" onclick="toggleHumanOptions()" title="Toca para ver o esconder opciones">
+        <div class="human-orb-ring ring-1"></div>
+        <div class="human-orb-ring ring-2"></div>
+        <div class="human-orb green" id="humanOrb">
+          <div class="human-orb-core">
+            <span class="human-orb-icon" id="humanOrbIcon">🛡️</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Textos en Lenguaje Humano y Cálido -->
+      <div class="human-status-box">
+        <h2 class="human-status-title" id="humanStatusTitle">Estás conectado y 100% protegido</h2>
+        <p class="human-status-desc" id="humanStatusDesc">Tu internet ahora es libre, privado y directo. Ningún intermediario ni proveedor puede rastrearte ni intervenir tus canales.</p>
+        <button class="btn-human-tap" id="btnHumanTap" onclick="toggleHumanOptions()">
+          <span id="btnHumanTapText">✨ Toca aquí para ver tus opciones</span>
+          <span class="btn-human-chevron open" id="humanTapChevron">▼</span>
+        </button>
+      </div>
+
+      <!-- Bandeja de Opciones Progresivas -->
+      <div class="human-options-tray expanded" id="humanOptionsTray">
+        <div class="human-cards-grid">
+          <!-- Tarjeta 1: Navegación Privada -->
+          <div class="human-card card-vpn" onclick="openCorporateVPNModal()">
+            <div class="human-card-header">
+              <span class="human-card-emoji">🔒</span>
+              <span class="human-card-badge badge-active" id="humanVpnBadge">Escudo Activo</span>
+            </div>
+            <h3>Navegación Privada</h3>
+            <p>Navega por cualquier sitio web sin que nadie sepa quién eres ni te bloquee páginas por tu ubicación.</p>
+            <button class="btn-human-action">Abrir Escudo Web</button>
+          </div>
+
+          <!-- Tarjeta 2: Música y Radio Libre -->
+          <div class="human-card card-music" onclick="playDefaultRadio()">
+            <div class="human-card-header">
+              <span class="human-card-emoji">🎵</span>
+              <span class="human-card-badge">Comunidad</span>
+            </div>
+            <h3>Música & Radio Libre</h3>
+            <p>Escucha música relajante a 432 Hz y transmisiones de audio sin publicidad ni consumo de video.</p>
+            <button class="btn-human-action" id="btnHumanMusic">Escuchar Música</button>
+          </div>
+
+          <!-- Tarjeta 3: Mensajes Directos -->
+          <div class="human-card card-chat" onclick="openSovereignChat()">
+            <div class="human-card-header">
+              <span class="human-card-emoji">💬</span>
+              <span class="human-card-badge">Directo</span>
+            </div>
+            <h3>Mensajes Seguros</h3>
+            <p>Habla directamente con quien quieras de persona a persona. Nadie más en el mundo puede leer lo que escribes.</p>
+            <button class="btn-human-action">Escribir Mensaje</button>
+          </div>
+
+          <!-- Tarjeta 4: Transmitir en Vivo -->
+          <div class="human-card card-live" onclick="openLiveStreamModal()">
+            <div class="human-card-header">
+              <span class="human-card-emoji">📺</span>
+              <span class="human-card-badge">P2P</span>
+            </div>
+            <h3>Transmitir en Vivo</h3>
+            <p>Comparte tu pantalla o tu cámara en tiempo real sin servidores centrales ni registros.</p>
+            <button class="btn-human-action">Iniciar Transmisión</button>
+          </div>
+
+          <!-- Tarjeta 5: Doctor de Red -->
+          <div class="human-card card-probe" onclick="openNetworkProbeModal()">
+            <div class="human-card-header">
+              <span class="human-card-emoji">🩺</span>
+              <span class="human-card-badge badge-ok" id="humanProbeBadge">100% Limpia</span>
+            </div>
+            <h3>Doctor de Red</h3>
+            <p>Comprueba si tu compañía de internet está bloqueando páginas, vigilando o ralentizando tu señal.</p>
+            <button class="btn-human-action">Revisar Salud de Red</button>
+          </div>
+
+          <!-- Tarjeta 6: Recuperación ante Apagón -->
+          <div class="human-card card-blackout" onclick="triggerHumanBlackoutRecovery()">
+            <div class="human-card-header">
+              <span class="human-card-emoji">⚡</span>
+              <span class="human-card-badge">Rescate</span>
+            </div>
+            <h3>Reconexión Automática</h3>
+            <p>Si se corta la luz o cae internet, activa la búsqueda de vecinos para reconectar la red de inmediato.</p>
+            <button class="btn-human-action" id="btnHumanRecover">Probar Reconexión</button>
+          </div>
+        </div>
+
+        <!-- Conmutador a Modo Técnico Avanzado -->
+        <div class="human-advanced-switch-bar">
+          <span>⚙️ ¿Eres desarrollador o deseas ver la topología matemática de 12 anillos, eBPF y el grafo Kùzu?</span>
+          <button class="btn-toggle-advanced" id="btnToggleAdvanced" onclick="enableAdvancedMode()">
+            Abrir Modo Técnico / Avanzado ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- WRAPPER DEL PANEL TÉCNICO AVANZADO (Niveles 1 al 7) -->
+    <div id="technical-dashboard-wrapper" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 0 4px;">
+        <span style="font-size: 0.82rem; color: var(--text-muted);">🛠️ Modo Técnico Avanzado Activado</span>
+        <button class="btn-return-simple-mode" onclick="disableAdvancedMode()">← Volver a Vista Simple (Nivel 0)</button>
+      </div>
+
+      <!-- Barra de Selección de Niveles de Operación (1 al 7) -->
+      <section class="card glass-card level-selector-card">
+        <div class="level-top-row">
+          <div class="level-title-group">
           <span class="level-badge-active" id="current-level-badge">NIVEL 1 · MODO CONSUMIDOR</span>
           <span style="font-size: 0.8rem; color: var(--text-muted);">Espectro de Complejidad Adaptativa:</span>
         </div>
@@ -1642,6 +1755,7 @@
         <span class="t-val purple">14 Nodos PFO</span>
       </div>
     </footer>
+    </div> <!-- #technical-dashboard-wrapper -->
 
     <!-- ================================================================== -->
     <!-- MODAL 1: CHAT SOBERANO E2EE (ESTILO WHATSAPP WEB)                  -->

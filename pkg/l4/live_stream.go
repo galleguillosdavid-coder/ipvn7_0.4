@@ -100,7 +100,7 @@ func (m *LiveStreamManager) RegisterChannel(id, title, broadcasterDID, vCodec, a
 
 // GetChannel obtiene un canal por su ID
 func (m *LiveStreamManager) GetChannel(id string) (*StreamChannel, error) {
-	m.mu.RUnlock()
+	m.mu.RLock()
 	defer m.mu.RUnlock()
 
 	ch, exists := m.channels[id]

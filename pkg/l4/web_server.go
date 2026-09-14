@@ -60,6 +60,7 @@ type WebDashboardServer struct {
 	LiveStream    *LiveStreamManager
 	AudioRadio    *AudioRadioManager
 	Probe         *l1.NetworkProbeEngine
+	Blackout      *l1.BlackoutRecoveryManager
 	CopilotMode   string
 	StartTime     time.Time
 	StaticDir     string
@@ -151,6 +152,7 @@ func NewWebDashboardServer(
 		LiveStream:    NewLiveStreamManager(id),
 		AudioRadio:    NewAudioRadioManager(id),
 		Probe:         l1.NewNetworkProbeEngine(id, router),
+		Blackout:      l1.NewBlackoutRecoveryManager(id, l1.NewBlindRendezvousManager(id, l1.NewMemoryBlindBeaconStore(), "ipvn7-sovereign-v0.4")),
 		CopilotMode:   "off",
 		StartTime:     time.Now(),
 		StaticDir:     staticDir,
@@ -272,6 +274,9 @@ func (ws *WebDashboardServer) Start() error {
 	// Endpoints Sonda Voluntaria de Red & Detección de Censura
 	mux.HandleFunc("/api/probe/report", ws.handleProbeReport)
 	mux.HandleFunc("/api/probe/toggle", ws.handleProbeToggle)
+
+	// Endpoint Protocolo de Recuperación en Cascada Post-Apagón (5 Fases Reales)
+	mux.HandleFunc("/api/mesh/blackout/cascade", ws.handleBlackoutCascade)
 
 	// Endpoint Control de Gobernanza de IA Opcional (Zero Token Drain)
 	mux.HandleFunc("/api/copilot/mode", ws.handleCopilotMode)
@@ -2230,6 +2235,52 @@ func (ws *WebDashboardServer) handleCopilotMode(w http.ResponseWriter, r *http.R
 		"is_optional":  true,
 	})
 }
+
+func (ws *WebDashboardServer) handleBlackoutCascade(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// 1. Evaluar estado real del grafo y pares
+	peers := ws.Router.GetAllPeers()
+	directPeers := len(peers)
+	pfo := ws.Kuzu.GetPFOTree()
+	hasLocalHistory := directPeers > 0 || pfo["total_peers"].(int) > 0
+
+	// 2. Ejecutar prueba reflexiva STUN RFC 5389 en vivo
+	stunRes, _ := l1.ProbeSTUN(nil, 800*time.Millisecond)
+	wanReachable := stunRes != nil
+
+	// 3. Ejecución determinista de la FSM Post-Apagón
+	currentPhase := ws.Blackout.StepCascade(hasLocalHistory, 1, wanReachable, directPeers)
+	nextJitter := ws.Blackout.JitterTimer.NextInterval()
+
+	phaseText := currentPhase.String()
+	switch currentPhase {
+	case l1.PhaseColdMemory:
+		phaseText = "FASE 1: MEMORIA KÙZUDB (Sondeo Silencioso)"
+	case l1.PhaseOffGridProximity:
+		phaseText = "FASE 2: PROXIMIDAD OFFGRID (BLE / LoRa / LAN)"
+	case l1.PhaseWANProbe:
+		phaseText = "FASE 3: SONDEO WAN STUN (Reflexivo RFC 5389)"
+	case l1.PhaseBlindRendezvous:
+		phaseText = "FASE 4: BALIZA CIEGA (EBRA Zero-Knowledge)"
+	case l1.PhaseConvergedMesh:
+		phaseText = "FASE 5: RED CONVERGIDA P2P (Estable ✓)"
+	}
+
+	_ = json.NewEncoder(w).Encode(map[string]interface{}{
+		"success":       true,
+		"phase":         phaseText,
+		"phase_id":      int(currentPhase),
+		"jitter_ms":     float64(nextJitter.Microseconds()) / 1000.0,
+		"wan_reachable": wanReachable,
+		"stun_result":   stunRes,
+		"direct_peers":  directPeers,
+		"logs":          ws.Blackout.GetLogs(),
+		"converged":     directPeers >= 2,
+	})
+}
+
 
 
 

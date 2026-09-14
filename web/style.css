@@ -3458,4 +3458,410 @@ body[data-operating-level="7"] {
   padding: 10px 14px;
 }
 
+/* ==============================================================================
+   NIVEL 0: ESFERA VIVA SOBERANA & EXPERIENCIA HUMANA ULTRA-SIMPLE (SKILL 8.0)
+   ============================================================================== */
+
+.human-level0-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 36px 20px 48px;
+  text-align: center;
+  position: relative;
+  border-radius: 24px;
+  background: radial-gradient(ellipse at 50% 20%, rgba(16, 185, 129, 0.08) 0%, rgba(10, 14, 26, 0.4) 70%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 24px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Contenedor del Orbe Palpitante */
+.human-orb-container {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: transform 0.3s ease;
+  user-select: none;
+}
+
+.human-orb-container:hover {
+  transform: scale(1.05);
+}
+
+.human-orb-container:active {
+  transform: scale(0.97);
+}
+
+.human-orb {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease;
+  z-index: 2;
+}
+
+/* Núcleo del Orbe */
+.human-orb-core {
+  font-size: 3.2rem;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s ease;
+}
+
+.human-orb-container:hover .human-orb-core {
+  transform: scale(1.1);
+}
+
+/* Anillos Concéntricos Palpitantes */
+.human-orb-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.human-orb-ring.ring-1 {
+  width: 170px;
+  height: 170px;
+  animation: orbRipple 2.8s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.human-orb-ring.ring-2 {
+  width: 210px;
+  height: 210px;
+  animation: orbRipple 2.8s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s;
+}
+
+/* Estado 1: VERDE (Conectado y Protegido) */
+.human-orb.green {
+  background: radial-gradient(circle at 35% 35%, #6ee7b7 0%, #10b981 50%, #047857 100%);
+  box-shadow: 0 0 60px rgba(16, 185, 129, 0.55), 0 0 120px rgba(16, 185, 129, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.6);
+  animation: orbBreathGreen 3.2s infinite ease-in-out;
+}
+
+.human-orb.green ~ .human-orb-ring {
+  border: 2px solid rgba(16, 185, 129, 0.4);
+}
+
+/* Estado 2: AMARILLO (Conectando / Sincronizando) */
+.human-orb.yellow {
+  background: radial-gradient(circle at 35% 35%, #fef08a 0%, #f59e0b 50%, #b45309 100%);
+  box-shadow: 0 0 60px rgba(245, 158, 11, 0.55), 0 0 120px rgba(245, 158, 11, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.6);
+  animation: orbBreathYellow 1.6s infinite ease-in-out;
+}
+
+.human-orb.yellow ~ .human-orb-ring {
+  border: 2px solid rgba(245, 158, 11, 0.5);
+}
+
+/* Estado 3: ROJO (Desconectado / Alerta) */
+.human-orb.red {
+  background: radial-gradient(circle at 35% 35%, #fca5a5 0%, #ef4444 50%, #b91c1c 100%);
+  box-shadow: 0 0 60px rgba(239, 68, 68, 0.55), 0 0 120px rgba(239, 68, 68, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.6);
+  animation: orbBreathRed 2.4s infinite ease-in-out;
+}
+
+.human-orb.red ~ .human-orb-ring {
+  border: 2px solid rgba(239, 68, 68, 0.5);
+}
+
+/* Animaciones de Respiración del Orbe */
+@keyframes orbBreathGreen {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 50px rgba(16, 185, 129, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 0 85px rgba(16, 185, 129, 0.8), inset 0 0 35px rgba(255, 255, 255, 0.8);
+  }
+}
+
+@keyframes orbBreathYellow {
+  0%, 100% {
+    transform: scale(0.98);
+    box-shadow: 0 0 45px rgba(245, 158, 11, 0.5);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 85px rgba(245, 158, 11, 0.85);
+  }
+}
+
+@keyframes orbBreathRed {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 45px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 75px rgba(239, 68, 68, 0.75);
+  }
+}
+
+@keyframes orbRipple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+/* Textos de Estado Humano */
+.human-status-box {
+  max-width: 680px;
+}
+
+.human-status-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.human-status-desc {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+
+.btn-human-tap {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
+  padding: 10px 24px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.25s ease;
+}
+
+.btn-human-tap:hover {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  transform: translateY(-2px);
+}
+
+.btn-human-chevron {
+  transition: transform 0.3s ease;
+  font-size: 0.75rem;
+}
+
+.btn-human-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Bandeja de Opciones Progresivas */
+.human-options-tray {
+  width: 100%;
+  max-width: 1080px;
+  margin-top: 36px;
+  overflow: hidden;
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.human-options-tray.collapsed {
+  display: none;
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+.human-options-tray.expanded {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cuadrícula de Tarjetas Humanas */
+.human-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+  text-align: left;
+}
+
+.human-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.human-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: transparent;
+  transition: background 0.3s ease;
+}
+
+.human-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.4);
+}
+
+.human-card.card-vpn:hover::before { background: #10b981; }
+.human-card.card-music:hover::before { background: #00f0ff; }
+.human-card.card-chat:hover::before { background: #a855f7; }
+.human-card.card-live:hover::before { background: #ef4444; }
+.human-card.card-probe:hover::before { background: #f59e0b; }
+.human-card.card-blackout:hover::before { background: #ec4899; }
+
+.human-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.human-card-emoji {
+  font-size: 1.8rem;
+}
+
+.human-card-badge {
+  font-size: 0.72rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+.human-card-badge.badge-active {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.human-card-badge.badge-ok {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.human-card h3 {
+  font-size: 1.18rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.human-card p {
+  font-size: 0.86rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  margin-bottom: 18px;
+  flex-grow: 1;
+}
+
+.btn-human-action {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.human-card:hover .btn-human-action {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+/* Barra de Conmutación a Modo Técnico */
+.human-advanced-switch-bar {
+  margin-top: 32px;
+  padding: 16px 24px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.human-advanced-switch-bar span {
+  font-size: 0.88rem;
+  color: #94a3b8;
+}
+
+.btn-toggle-advanced {
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #00f0ff;
+  padding: 8px 18px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btn-toggle-advanced:hover {
+  background: rgba(0, 240, 255, 0.18);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Botón flotante para regresar al Modo Simple desde la vista técnica */
+.btn-return-simple-mode {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #10b981;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-return-simple-mode:hover {
+  background: rgba(16, 185, 129, 0.25);
+  transform: translateY(-1px);
+}
+
+
 
